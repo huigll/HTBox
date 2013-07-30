@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HTBox.Web", "HTBox.Web\HTBox.Web.csproj", "{16400D6B-1BD1-4455-8744-FBA954E6F852}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HTBox.Web.Tests", "HTBox.Web.Tests\HTBox.Web.Tests.csproj", "{C8FDA1A5-25DA-43A5-A1CA-63974A458FB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QQAuthentication", "QQAuthentication\QQAuthentication.csproj", "{12A761D4-F251-4CFD-AD86-C8F28E76F666}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{16400D6B-1BD1-4455-8744-FBA954E6F852}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16400D6B-1BD1-4455-8744-FBA954E6F852}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16400D6B-1BD1-4455-8744-FBA954E6F852}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16400D6B-1BD1-4455-8744-FBA954E6F852}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8FDA1A5-25DA-43A5-A1CA-63974A458FB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8FDA1A5-25DA-43A5-A1CA-63974A458FB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8FDA1A5-25DA-43A5-A1CA-63974A458FB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8FDA1A5-25DA-43A5-A1CA-63974A458FB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12A761D4-F251-4CFD-AD86-C8F28E76F666}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12A761D4-F251-4CFD-AD86-C8F28E76F666}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12A761D4-F251-4CFD-AD86-C8F28E76F666}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12A761D4-F251-4CFD-AD86-C8F28E76F666}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
