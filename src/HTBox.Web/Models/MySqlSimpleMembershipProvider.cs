@@ -18,7 +18,7 @@ namespace HTBox.Web.Models
 
         private MembershipProvider preProvider;
         private MemberAuthorContext dbContext;
-        private System.Data.Entity.DbSet<UserProfile> userProfiles;
+        private System.Data.Entity.DbSet<Webpages_UserProfile> userProfiles;
         private System.Data.Entity.DbSet<Webpages_OAuthMembership> oAuthMemberships;
         private System.Data.Entity.DbSet<Webpages_Roles> roles;
         private System.Data.Entity.DbSet<Webpages_UsersInRoles> usersInRoles;
@@ -137,29 +137,12 @@ namespace HTBox.Web.Models
 
         public override string CreateUserAndAccount(string userName, string password, bool requireConfirmation, IDictionary<string, object> values)
         {
-
-            // memberships.Add(new Webpages_Membership()
-            //{
-            //    UserId = 1111,
-            //    Password = "passwordHash",
-            //    CreateDate = DateTime.UtcNow,
-            //    IsConfirmed = false,
-            //    PasswordFailuresSinceLastSuccess = 0,
-            //    PasswordSalt = string.Empty,
-            //    ConfirmationToken = "token",
-            //    PasswordChangedDate = DateTime.UtcNow
-            //});
-            
-            
-            //    dbContext.SaveChanges();
-
-
             using (TransactionScope ts = new TransactionScope())
             {
                 if ((from u in userProfiles where u.UserName == userName select u).FirstOrDefault() != null)
                     throw new MembershipCreateUserException(MembershipCreateStatus.DuplicateUserName);
 
-                UserProfile user = new UserProfile() { UserName = userName };
+                Webpages_UserProfile user = new Webpages_UserProfile() { UserName = userName };
                 userProfiles.Add(user);
                 dbContext.SaveChanges();
                 

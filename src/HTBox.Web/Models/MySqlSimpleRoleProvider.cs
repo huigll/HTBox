@@ -86,9 +86,9 @@ namespace HTBox.Web.Models
             return roles;
         }
 
-        private List<UserProfile> getUserFromNames(string[] usernames)
+        private List<Webpages_UserProfile> getUserFromNames(string[] usernames)
         {
-            var users = new List<UserProfile>();
+            var users = new List<Webpages_UserProfile>();
             foreach (var name in usernames)
             {
                 var user = (from u in dbContext.UserProfiles where u.UserName == name select u).FirstOrDefault();
