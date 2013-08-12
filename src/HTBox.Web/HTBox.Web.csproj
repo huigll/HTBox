@@ -201,15 +201,22 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Lan\WebResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WebResource.resx</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\DataTables.cs" />
     <Compile Include="Models\MemberAuthorContext.cs" />
     <Compile Include="Models\MySqlSimpleMembershipProvider.cs" />
     <Compile Include="Models\MySqlSimpleRoleProvider.cs" />
+    <Compile Include="App_Start\SiteSetting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -342,12 +349,21 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\jquery-2.0.3.min.map" />
+    <Content Include="Views\Menu\Index.cshtml" />
+    <Content Include="SiteSetting\CommonVision.config" />
+    <Content Include="Views\Menu\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\QQAuthentication\QQAuthentication.csproj">
       <Project>{12A761D4-F251-4CFD-AD86-C8F28E76F666}</Project>
       <Name>QQAuthentication</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Lan\WebResource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WebResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

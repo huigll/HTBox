@@ -117,8 +117,11 @@ namespace HTBox.Web.Models
     [Table("webpages_MenuTreeRight")]
     public class MenuTreeRight
     {
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.None)]
         [Key, Column(Order = 0)]
         public int MenuId { get; set; }
+
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.None)]
         [Key, Column(Order = 1)]
         public int VuserID { get; set; }
 

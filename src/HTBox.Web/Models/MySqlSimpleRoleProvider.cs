@@ -26,7 +26,7 @@ namespace HTBox.Web.Models
         private static string DEFAULT_PROVIDER_CONFIG_NAME = "provider";
 
         private RoleProvider preProvider;
-        private MemberAuthorContext dbContext;
+        private WebPagesContext dbContext;
 
         public override void Initialize(string name, System.Collections.Specialized.NameValueCollection config)
         {
@@ -38,7 +38,7 @@ namespace HTBox.Web.Models
             if (!string.IsNullOrEmpty(providerName))
                 this.preProvider = Roles.Providers[providerName] ?? Roles.Providers[DEFAULT_PROVIDER_NAME];
 
-            this.dbContext = new MemberAuthorContext();
+            this.dbContext = new WebPagesContext();
         }
 
         public override void AddUsersToRoles(string[] usernames, string[] roleNames)

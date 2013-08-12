@@ -6,12 +6,14 @@ using System.Data.Entity;
 using System.Globalization;
 using System.Web.Mvc;
 using System.Web.Security;
+using System.Data.Entity.Infrastructure;
 
 namespace HTBox.Web.Models
 {
-    public class MemberAuthorContext : DbContext
+    public class WebPagesContext : DbContext
     {
-        public MemberAuthorContext()
+       
+        public WebPagesContext()
             : base("DefaultConnection")
         {
         }
@@ -27,7 +29,6 @@ namespace HTBox.Web.Models
         public DbSet<MenuTree> MenuTrees { get; set; }
         public DbSet<MenuTreeRight> MenuTreeRights { get; set; }
         public DbSet<Webpages_VUser> Webpages_VUsers { get; set; }
-       
     }
 
 

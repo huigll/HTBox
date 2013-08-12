@@ -1,0 +1,45 @@
+﻿@model HTBox.Web.Models.MenuTree
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+
+    <fieldset>
+        <legend>Registration Form</legend>
+        <ol>
+            <li>
+                @Html.LabelFor(m => m.MenuName)
+                @Html.TextBoxFor(m => m.MenuName)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.PageUrl)
+                @Html.TextBoxFor(m => m.PageUrl)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.ParentId)
+                @Html.TextBoxFor(m => m.ParentId)
+            </li>
+
+            <li>
+                @Html.LabelFor(m => m.Order)
+                @Html.TextBoxFor(m => m.Order)
+            </li>
+
+            <li>
+                @Html.LabelFor(m => m.IsHidden)
+                @Html.CheckBoxFor(m => m.IsHidden)
+            </li>
+        </ol>
+        <input type="submit" value="Save" />
+    </fieldset>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

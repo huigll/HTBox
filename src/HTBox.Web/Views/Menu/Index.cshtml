@@ -1,0 +1,83 @@
+﻿@model IEnumerable<HTBox.Web.Models.MenuTree>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>
+    Index</h2>
+<p>
+    @Html.ActionLink("Create New", "Create", "Menu")
+</p>
+<table>
+    <tr>
+        <th>
+        </th>
+        <th>
+            Last Name
+        </th>
+        <th>
+            First Name
+        </th>
+        <th>
+            Enrollment Date
+        </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.MenuId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.MenuId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.MenuId }, new { @class = "delete-link" })
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MenuName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PageUrl)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ParentId)
+            </td>
+        </tr>
+    }
+</table>
+<div id="delete-dialog" title="Confirmation">
+<p>Are you sure you want to delete this Brand?</p>
+</div>	
+
+<script type="text/javascript">
+    var deleteLinkObj;
+    // delete Link
+    $('.delete-link').click(function () {
+        deleteLinkObj = $(this);  //for future use
+        $('#delete-dialog').dialog('open');
+        return false; // prevents the default behaviour
+    });
+    $('#delete-dialog').dialog({
+        autoOpen: false, width: 400, resizable: false, modal: true, //Dialog options
+        buttons: {
+            "Continue": function () {
+                $.post(deleteLinkObj[0].href, function (data) {  //Post to action
+                    if (data == '<%= Boolean.TrueString %>') {
+                        deleteLinkObj.closest("tr").hide('fast'); //Hide Row
+                        //(optional) Display Confirmation
+                    }
+                    else {
+                        //(optional) Display Error
+                    }
+                });
+                $(this).dialog("close");
+            },
+            "Cancel": function () {
+                $(this).dialog("close");
+            }
+        }
+    });
+</script>
+
+    
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryui")
+    @Styles.Render("~/Content/themes/base/css")
+}

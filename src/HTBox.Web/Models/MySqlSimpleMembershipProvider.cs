@@ -17,7 +17,7 @@ namespace HTBox.Web.Models
         private static string DEFAULT_PROVIDER_CONFIG_NAME = "provider";
 
         private MembershipProvider preProvider;
-        private MemberAuthorContext dbContext;
+        private WebPagesContext dbContext;
         private System.Data.Entity.DbSet<Webpages_UserProfile> userProfiles;
         private System.Data.Entity.DbSet<Webpages_OAuthMembership> oAuthMemberships;
         private System.Data.Entity.DbSet<Webpages_Roles> roles;
@@ -39,7 +39,7 @@ namespace HTBox.Web.Models
                     this.OnValidatingPassword(args);
                 };
 
-            this.dbContext = new MemberAuthorContext();
+            this.dbContext = new WebPagesContext();
             this.userProfiles = this.dbContext.UserProfiles;
             this.oAuthMemberships = this.dbContext.WebPagesOAuthMembership;
             this.roles = this.dbContext.WebPagesRoles;

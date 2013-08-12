@@ -25,11 +25,11 @@ namespace HTBox.Web.Filters
         {
             public SimpleMembershipInitializer()
             {
-                Database.SetInitializer<MemberAuthorContext>(null);
-
+                Database.SetInitializer<WebPagesContext>(null);
+                
                 try
                 {
-                    using (var context = new MemberAuthorContext())
+                    using (var context = new WebPagesContext())
                     {
                         if (!context.Database.Exists())
                         {

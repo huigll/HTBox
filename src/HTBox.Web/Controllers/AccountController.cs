@@ -271,7 +271,7 @@ namespace HTBox.Web.Controllers
             if (ModelState.IsValid)
             {
                 // Insert a new user into the database
-                using (MemberAuthorContext db = new MemberAuthorContext())
+                using (WebPagesContext db = new WebPagesContext())
                 {
                     Webpages_UserProfile user = db.UserProfiles.FirstOrDefault(u => u.UserName.ToLower() == model.UserName.ToLower());
                     // Check if user already exists
