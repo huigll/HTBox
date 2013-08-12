@@ -352,6 +352,7 @@
     <Content Include="Views\Menu\Index.cshtml" />
     <Content Include="SiteSetting\CommonVision.config" />
     <Content Include="Views\Menu\Create.cshtml" />
+    <Content Include="Views\Menu\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\QQAuthentication\QQAuthentication.csproj">

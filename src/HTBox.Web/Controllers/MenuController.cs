@@ -35,19 +35,12 @@ namespace HTBox.Web.Controllers
         {
             using (var db = new WebPagesContext())
             {
-                return View(db.MenuTrees.Find(id));
-            }
-        }
-
-        [HttpPost]
-        public ActionResult Delete(int id, MenuTree menu)
-        {
-            using (var db = new WebPagesContext())
-            {
+                var menu = db.MenuTrees.Find(id);
                 db.Entry(menu).State = System.Data.EntityState.Deleted;
                 db.SaveChanges();
             }
-            return RedirectToAction("Index");
+            return Content(Boolean.TrueString);
         }
+
     }
 }
