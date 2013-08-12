@@ -197,6 +197,7 @@
     <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\MvcHtmlStringExten.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -214,12 +215,37 @@
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\DataTables.cs" />
     <Compile Include="Models\MemberAuthorContext.cs" />
+    <Compile Include="Models\Menu.cs" />
     <Compile Include="Models\MySqlSimpleMembershipProvider.cs" />
     <Compile Include="Models\MySqlSimpleRoleProvider.cs" />
     <Compile Include="App_Start\SiteSetting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\images\buttonBlue.gif" />
+    <Content Include="Content\images\corners-sprite.gif" />
+    <Content Include="Content\images\edit.gif" />
+    <Content Include="Content\images\editdelete.png" />
+    <Content Include="Content\images\grid\approve.gif" />
+    <Content Include="Content\images\grid\grid.gif" />
+    <Content Include="Content\images\grid\gridth.gif" />
+    <Content Include="Content\images\grid\headbg.gif" />
+    <Content Include="Content\images\grid\magnifier.gif" />
+    <Content Include="Content\images\grid\page-bg.gif" />
+    <Content Include="Content\images\grid\page-first-dis.gif" />
+    <Content Include="Content\images\grid\page-first.gif" />
+    <Content Include="Content\images\grid\page-last-dis.gif" />
+    <Content Include="Content\images\grid\page-last.gif" />
+    <Content Include="Content\images\grid\page-next-dis.gif" />
+    <Content Include="Content\images\grid\page-next.gif" />
+    <Content Include="Content\images\grid\page-prev-dis.gif" />
+    <Content Include="Content\images\grid\page-prev.gif" />
+    <Content Include="Content\images\grid\sort_asc.gif" />
+    <Content Include="Content\images\grid\sort_desc.gif" />
+    <Content Include="Content\images\left-right.gif" />
+    <Content Include="Content\images\menu-bg.gif" />
+    <Content Include="Content\images\text-bg.gif" />
+    <Content Include="Content\images\top-bottom.gif" />
     <Content Include="Content\themes\base\images\animated-overlay.gif" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -353,6 +379,8 @@
     <Content Include="SiteSetting\CommonVision.config" />
     <Content Include="Views\Menu\Create.cshtml" />
     <Content Include="Views\Menu\Delete.cshtml" />
+    <Content Include="Views\Menu\Search.cshtml" />
+    <Content Include="Views\Menu\_SearchResult.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\QQAuthentication\QQAuthentication.csproj">

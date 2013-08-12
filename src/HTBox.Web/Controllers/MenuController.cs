@@ -12,11 +12,21 @@ namespace HTBox.Web.Controllers
         private WebPagesContext db = new WebPagesContext();
         //
         // GET: /Menu/
-        public ActionResult Index(int pageIndex=0,int pageSize=10)
+        public ActionResult Index(int p=1,int pageSize=10)
         {
-            return View(db.MenuTrees.OrderBy(o=>o.MenuId).Skip(pageSize * pageIndex).Take(pageSize).ToList());
+            Menu m = new Menu();
+            m.CurrentPageNo = p;
+            m.StartPageNo = 1;
+            m.NeedToShow = 10;
+            if (p > 0) p--;
+            m.Menus = db.MenuTrees.OrderBy(o => o.MenuId).Skip(pageSize * p).Take(pageSize).ToList();
+            m.TotalPageNo = CountTotalPage(db.MenuTrees.Count() , pageSize);
+            return View(m);
         }
-
+        private static int CountTotalPage(int rowCount, int pageSize)
+        {
+            if (rowCount % pageSize == 0) { return rowCount / pageSize; } else { return rowCount / pageSize + 1; }
+        }
         public ActionResult Create()
         {
             return View();
@@ -40,6 +50,34 @@ namespace HTBox.Web.Controllers
                 db.SaveChanges();
             }
             return Content(Boolean.TrueString);
+        }
+
+
+        public ActionResult Search(string name="", int p = 1, int pageSize = 10)
+        {
+
+            Menu m = new Menu();
+
+            m.CurrentPageNo = p;
+            m.StartPageNo = 1;
+            m.NeedToShow = 10;
+            if (p > 0) p--;
+            if (!string.IsNullOrEmpty(name))
+            {
+                m.TotalPageNo = CountTotalPage(db.MenuTrees.Where
+                    (o => o.MenuName.IndexOf(name) != -1).Count(), pageSize);
+                m.Menus = db.MenuTrees.Where
+                    (o => o.MenuName.IndexOf(name) != -1)
+                    .OrderBy(o => o.MenuId).Skip(pageSize * p).Take(pageSize).ToList();
+            }
+            else
+            {
+                m.TotalPageNo = CountTotalPage(db.MenuTrees.Count(), pageSize);
+                m.Menus = db.MenuTrees.OrderBy(o => o.MenuId).
+                    Skip(pageSize * p).Take(pageSize).ToList();
+            }
+
+            return View(m);
         }
 
     }
