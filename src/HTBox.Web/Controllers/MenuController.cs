@@ -22,7 +22,7 @@ namespace HTBox.Web.Controllers
             m.Menus = db.MenuTrees
                 .Where(o=> parentID.HasValue ?o.ParentId == parentID.Value:o.ParentId == null)
                 .OrderBy(orderby, desc).Skip(pageSize * p).Take(pageSize).ToList();
-            m.TotalPageNo = CountTotalPage(db.MenuTrees.Count(), pageSize);
+            m.TotalPageNo = CountTotalPage(db.MenuTrees.Where(o => parentID.HasValue ? o.ParentId == parentID.Value : o.ParentId == null).Count(), pageSize);
             return View(m);
         }
         private static int CountTotalPage(int rowCount, int pageSize)

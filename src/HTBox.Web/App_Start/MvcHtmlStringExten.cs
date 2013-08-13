@@ -7,6 +7,7 @@ using System.Text;
 using System.Web.Mvc.Html;
 using System.Collections.Specialized;
 using System.Web.Routing;
+using HTBox.Web.Models;
 namespace System.Web.Mvc
 {
     public static class MvcHtmlStringExten
@@ -145,6 +146,31 @@ namespace System.Web.Mvc
                 values["desc"] = "false";
             }
             return helper.ActionLink(linkText, actionName, values, htmlAttribs);
+        }
+    }
+
+
+    public static class MenuNavigation
+    {
+        public static MvcHtmlString GetParentNavigation(this HtmlHelper helper, MenuTree menu)
+        {
+            if (menu == null || !menu.ParentId.HasValue) return null;
+            StringBuilder sb = new StringBuilder();
+           
+            MenuTree parent;
+            
+            using (var db = new WebPagesContext())
+            {
+                do
+                {
+                    parent = db.MenuTrees.First(o => o.MenuId == menu.ParentId.Value);
+                    sb.Insert(0," > " + helper.ActionLink(parent.MenuName, "Search", new { ParentID = parent.MenuId }));
+                    menu = parent;
+
+                } while (parent.ParentId.HasValue);
+            }
+            sb.Insert(0, helper.ActionLink("Root", "Search").ToString());
+            return MvcHtmlString.Create(sb.ToString());
         }
     }
 }

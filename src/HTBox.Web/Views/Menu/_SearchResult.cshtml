@@ -38,6 +38,10 @@
                                 </td>
                                 <td>
                                     <input type="button" onclick="window.location.href='@Url.Action("Create", "Menu")'; return false;" value="Create"/>
+                                    @if (Model.Menus != null && Model.Menus.Count > 0) 
+                                    {
+                                        @Html.GetParentNavigation(Model.Menus[0])
+                                    }
                                 </td>
                             </tr>
                         </table>
