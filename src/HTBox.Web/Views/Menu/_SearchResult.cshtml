@@ -38,10 +38,10 @@
                                 </td>
                                 <td>
                                     <input type="button" onclick="window.location.href='@Url.Action("Create", "Menu")'; return false;" value="Create"/>
-                                    @if (Model.Menus != null && Model.Menus.Count > 0) 
-                                    {
-                                        @Html.GetParentNavigation(Model.Menus[0])
-                                    }
+                                    
+                                        @Html.GetParentNavigation(Model)
+                                    
+                                    
                                 </td>
                             </tr>
                         </table>
@@ -88,7 +88,10 @@
             <tr class="row">
                 <td width="50px">
                     @Html.ActionImage("Edit", new { id = item.MenuId }, "~/Content/images/edit.gif", "Edit")
-                    @Html.ActionImage("Delete", new { id = item.MenuId }, new { @class = "delete-link", @imagesrc = "~/Content/images/editdelete.png" })
+                    @if (!Model.HasChildren(item))
+                    {
+                        @Html.ActionImage("Delete", new { id = item.MenuId }, new { @class = "delete-link", @imagesrc = "~/Content/images/editdelete.png" })
+                    }
                 </td>
                 <td>
                     @if (Model.HasChildren(item))
@@ -104,7 +107,7 @@
                     @Html.DisplayFor(modelItem => item.PageUrl)
                 </td>
                 <td>
-                    @Html.ActionLink("Add", "Create", new { parentId = item.MenuId }) 
+                    @Html.ActionLink("Add", "Create", new { parentId = item.MenuId })
                 </td>
             </tr>
         }

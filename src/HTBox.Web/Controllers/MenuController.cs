@@ -15,6 +15,7 @@ namespace HTBox.Web.Controllers
         public ActionResult Index(int p = 1,int? parentID=null, int pageSize = 10, string orderby = "MenuId", bool desc = false)
         {
             Menu m = new Menu();
+            m.ParentId = parentID;
             m.CurrentPageNo = p;
             m.StartPageNo = 1;
             m.NeedToShow = 10;
@@ -80,7 +81,7 @@ namespace HTBox.Web.Controllers
         {
 
             Menu m = new Menu();
-
+            m.ParentId = parentID;
             m.CurrentPageNo = p;
             m.StartPageNo = 1;
             m.NeedToShow = 10;

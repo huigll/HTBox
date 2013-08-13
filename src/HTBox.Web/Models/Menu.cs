@@ -15,7 +15,7 @@ namespace HTBox.Web.Models
         public int CurrentPageNo { get; set; }
         public int TotalPageNo { get; set; }
         public int NeedToShow { get; set; }
-
+        public int? ParentId { get; set; }
         public bool HasChildren(MenuTree menu)
         {
             using (var db = new WebPagesContext())

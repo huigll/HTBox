@@ -152,20 +152,20 @@ namespace System.Web.Mvc
 
     public static class MenuNavigation
     {
-        public static MvcHtmlString GetParentNavigation(this HtmlHelper helper, MenuTree menu)
+        public static MvcHtmlString GetParentNavigation(this HtmlHelper helper, Menu menu)
         {
             if (menu == null || !menu.ParentId.HasValue) return null;
             StringBuilder sb = new StringBuilder();
            
             MenuTree parent;
-            
+            int menuId = menu.ParentId.Value;
             using (var db = new WebPagesContext())
             {
                 do
                 {
-                    parent = db.MenuTrees.First(o => o.MenuId == menu.ParentId.Value);
+                    parent = db.MenuTrees.First(o => o.MenuId == menuId);
                     sb.Insert(0," > " + helper.ActionLink(parent.MenuName, "Search", new { ParentID = parent.MenuId }));
-                    menu = parent;
+                    menuId = parent.ParentId??0;
 
                 } while (parent.ParentId.HasValue);
             }
