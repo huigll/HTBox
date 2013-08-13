@@ -17,7 +17,14 @@
             </li>
             <li>
                 @Html.LabelFor(m => m.ParentId)
-                @Html.TextBoxFor(m => m.ParentId)
+                @if (!string.IsNullOrEmpty(Request.QueryString["parentId"]))
+                {
+                      @Html.TextBoxFor(m => Request.QueryString["parentId"], new { @readonly = "readonly" })
+                }
+                else
+                {
+                    @Html.TextBoxFor(m => m.ParentId, new { @readonly = "readonly" })
+                }
             </li>
 
             <li>
@@ -31,6 +38,7 @@
             </li>
         </ol>
         <input type="submit" value="Save" />
+        <input type="button" onclick="window.location.href='@Url.Action("Index", "Menu")'; return false;" value="Cancel" class="cancel" />
     </fieldset>
 }
 

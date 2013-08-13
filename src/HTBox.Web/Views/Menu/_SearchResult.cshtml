@@ -37,7 +37,7 @@
                                     <input type="submit" value="Search" />
                                 </td>
                                 <td>
-                                    @Html.ActionLink("Create New", "Create", "Menu")
+                                    <input type="button" onclick="window.location.href='@Url.Action("Create", "Menu")'; return false;" value="Create"/>
                                 </td>
                             </tr>
                         </table>
@@ -51,7 +51,8 @@
 <div class="gvContainer">
     <table class="gv" width="100%">
         <caption>
-            <div>Menu List</div>
+            <div>
+                Menu List</div>
         </caption>
         <tr class="head">
             <th>
@@ -74,31 +75,38 @@
                        : ""
                 }, this.Request.QueryString)
             </th>
-            <th>
-                Enrollment Date
+            <th width="25px">
+                Add
             </th>
         </tr>
         @foreach (var item in Model.Menus)
         {
             <tr class="row">
                 <td width="50px">
-                    @Html.ActionImage("Edit", new { id = item.MenuId },"~/Content/images/edit.gif","Edit") 
+                    @Html.ActionImage("Edit", new { id = item.MenuId }, "~/Content/images/edit.gif", "Edit")
                     @Html.ActionImage("Delete", new { id = item.MenuId }, new { @class = "delete-link", @imagesrc = "~/Content/images/editdelete.png" })
                 </td>
                 <td>
-                    @Html.ActionLink(@item.MenuName,"Detail", new { id = item.MenuId }) 
+                    @if (Model.HasChildren(item))
+                    {
+                        @Html.ActionLink(item.MenuName, "Search", new { parentId = item.MenuId }) 
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.MenuName)
+                    }
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.PageUrl)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ParentId)
+                    @Html.ActionLink("Add", "Create", new { parentId = item.MenuId }) 
                 </td>
             </tr>
         }
     </table>
 </div>
-@Html.Pager(Model.StartPageNo, Model.CurrentPageNo, Model.TotalPageNo, Model.NeedToShow, "p",this.Request.QueryString)
+@Html.Pager(Model.StartPageNo, Model.CurrentPageNo, Model.TotalPageNo, Model.NeedToShow, "p", this.Request.QueryString)
 <div id="delete-dialog" title="Confirmation">
     <p>
         Are you sure you want to delete this Brand?</p>
@@ -132,4 +140,3 @@
         }
     });
 </script>
-

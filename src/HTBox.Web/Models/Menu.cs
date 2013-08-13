@@ -13,5 +13,12 @@ namespace HTBox.Web.Models
         public int TotalPageNo { get; set; }
         public int NeedToShow { get; set; }
 
+        public bool HasChildren(MenuTree menu)
+        {
+            using (var db = new WebPagesContext())
+            {
+                return db.MenuTrees.Where(o=>o.ParentId == menu.MenuId).Any();
+            }
+        }
     }
 }

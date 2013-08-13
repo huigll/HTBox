@@ -12,14 +12,16 @@ namespace HTBox.Web.Controllers
         private WebPagesContext db = new WebPagesContext();
         //
         // GET: /Menu/
-        public ActionResult Index(int p = 1, int pageSize = 10, string orderby = "MenuId", bool desc = false)
+        public ActionResult Index(int p = 1,int? parentID=null, int pageSize = 10, string orderby = "MenuId", bool desc = false)
         {
             Menu m = new Menu();
             m.CurrentPageNo = p;
             m.StartPageNo = 1;
             m.NeedToShow = 10;
             if (p > 0) p--;
-            m.Menus = db.MenuTrees.OrderBy(orderby, desc).Skip(pageSize * p).Take(pageSize).ToList();
+            m.Menus = db.MenuTrees
+                .Where(o=> parentID.HasValue ?o.ParentId == parentID.Value:o.ParentId == null)
+                .OrderBy(orderby, desc).Skip(pageSize * p).Take(pageSize).ToList();
             m.TotalPageNo = CountTotalPage(db.MenuTrees.Count(), pageSize);
             return View(m);
         }
@@ -34,51 +36,47 @@ namespace HTBox.Web.Controllers
         [HttpPost]
         public ActionResult Create(MenuTree menu)
         {
-            using (var db = new WebPagesContext())
-            {
-                db.MenuTrees.Add(menu);
-                db.SaveChanges();
-                return RedirectToAction("index");
-            }
+
+            db.MenuTrees.Add(menu);
+            db.SaveChanges();
+            return RedirectToAction("index");
+
         }
         public ActionResult Edit(int id)
         {
-            using (var db = new WebPagesContext())
-            {
-                var menu = db.MenuTrees.Find(id);
-                if (menu == null)
-                    return HttpNotFound();
-                return View(menu);
-            }
+
+            var menu = db.MenuTrees.Find(id);
+            if (menu == null)
+                return HttpNotFound();
+            return View(menu);
+
         }
         [HttpPost]
         public ActionResult Edit(MenuTree menu)
         {
             if (ModelState.IsValid)
             {
-                using (var db = new WebPagesContext())
-                {
-                    db.Entry(menu).State = System.Data.EntityState.Modified;
-                    db.SaveChanges();
-                    return RedirectToAction("index");
-                }
+
+                db.Entry(menu).State = System.Data.EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("index");
+
             }
             return View(menu);
         }
 
         public ActionResult Delete(int id)
         {
-            using (var db = new WebPagesContext())
-            {
-                var menu = db.MenuTrees.Find(id);
-                db.Entry(menu).State = System.Data.EntityState.Deleted;
-                db.SaveChanges();
-            }
+
+            var menu = db.MenuTrees.Find(id);
+            db.Entry(menu).State = System.Data.EntityState.Deleted;
+            db.SaveChanges();
+
             return Content(Boolean.TrueString);
         }
 
 
-        public ActionResult Search(string name="", int p = 1, int pageSize = 10,string orderby="MenuId",bool desc=false)
+        public ActionResult Search(string name="",int?parentID=null, int p = 1, int pageSize = 10,string orderby="MenuId",bool desc=false)
         {
 
             Menu m = new Menu();
@@ -87,18 +85,20 @@ namespace HTBox.Web.Controllers
             m.StartPageNo = 1;
             m.NeedToShow = 10;
             if (p > 0) p--;
+            var query = db.MenuTrees.Where(o=> parentID.HasValue ?o.ParentId == parentID.Value:o.ParentId == null);
             if (!string.IsNullOrEmpty(name))
             {
-                m.TotalPageNo = CountTotalPage(db.MenuTrees.Where
+                
+                m.TotalPageNo = CountTotalPage(query.Where
                     (o => o.MenuName.IndexOf(name) != -1).Count(), pageSize);
-                m.Menus = db.MenuTrees.Where
+                m.Menus = query.Where
                     (o => o.MenuName.IndexOf(name) != -1)
                     .OrderBy(orderby,desc).Skip(pageSize * p).Take(pageSize).ToList();
             }
             else
             {
-                m.TotalPageNo = CountTotalPage(db.MenuTrees.Count(), pageSize);
-                m.Menus = db.MenuTrees.OrderBy(orderby, desc).
+                m.TotalPageNo = CountTotalPage(query.Count(), pageSize);
+                m.Menus = query.OrderBy(orderby, desc).
                     Skip(pageSize * p).Take(pageSize).ToList();
             }
 
