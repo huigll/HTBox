@@ -41,6 +41,31 @@ namespace HTBox.Web.Controllers
                 return RedirectToAction("index");
             }
         }
+        public ActionResult Edit(int id)
+        {
+            using (var db = new WebPagesContext())
+            {
+                var menu = db.MenuTrees.Find(id);
+                if (menu == null)
+                    return HttpNotFound();
+                return View(menu);
+            }
+        }
+        [HttpPost]
+        public ActionResult Edit(MenuTree menu)
+        {
+            if (ModelState.IsValid)
+            {
+                using (var db = new WebPagesContext())
+                {
+                    db.Entry(menu).State = System.Data.EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("index");
+                }
+            }
+            return View(menu);
+        }
+
         public ActionResult Delete(int id)
         {
             using (var db = new WebPagesContext())

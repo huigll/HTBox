@@ -1,0 +1,36 @@
+﻿@model HTBox.Web.Models.MenuTree
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+    @Html.HiddenFor(model => model.MenuId)
+    <fieldset>
+        <legend>Registration Form</legend>
+        <ol>
+            <li>
+                @Html.LabelFor(m => m.MenuName)
+                @Html.TextBoxFor(m => m.MenuName)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.PageUrl)
+                @Html.TextBoxFor(m => m.PageUrl)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.ParentId)
+                @Html.TextBoxFor(m => m.ParentId)
+            </li>
+
+            <li>
+                @Html.LabelFor(m => m.Order)
+                @Html.TextBoxFor(m => m.Order)
+            </li>
+
+            <li>
+                @Html.LabelFor(m => m.IsHidden)
+                @Html.CheckBoxFor(m => m.IsHidden)
+            </li>
+        </ol>
+        <input type="submit" value="Save" />
+    </fieldset>
+}
+

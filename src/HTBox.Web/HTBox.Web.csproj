@@ -382,6 +382,8 @@
     <Content Include="Views\Menu\Delete.cshtml" />
     <Content Include="Views\Menu\Search.cshtml" />
     <Content Include="Views\Menu\_SearchResult.cshtml" />
+    <Content Include="Views\Menu\_Edit.cshtml" />
+    <Content Include="Views\Menu\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\QQAuthentication\QQAuthentication.csproj">
