@@ -635,23 +635,6 @@ tr.pager td {
             color: #333;
         }
 
-    /* menu */
-    nav {
-        margin-bottom: 5px;
-    }
-
-    ul#menu {
-        margin: 0;
-        padding: 0;
-        text-align: center;
-    }
-
-        ul#menu li {
-            margin: 0;
-            padding: 0;
-        }
-
-
     /* main layout
     ----------------------------------------------------------*/
     .main-content,
@@ -1186,4 +1169,3 @@ tr.pager td {
 {
 	background: url(images/grid/page-last-dis.gif) no-repeat center 50%;
 }
-

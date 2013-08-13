@@ -1,18 +1,35 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title>@ViewBag.Title - @HTBox.Web.SiteSetting.SiteName</title>
-        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-        <meta name="viewport" content="width=device-width" />
-        @Styles.Render("~/Content/css")
-        @Scripts.Render("~/bundles/modernizr")
-        @Scripts.Render("~/bundles/jquery")
-        @RenderSection("scripts", required: false)
-    </head>
-    <body>
-        <header>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title - @HTBox.Web.SiteSetting.SiteName</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width" />
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/themes/base/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/menu")
+    @RenderSection("scripts", required: false)
+    <script type="text/javascript">
+        $(function () {
+            // BUTTON
+            $('.fg-button').hover(
+    		function () { $(this).removeClass('ui-state-default').addClass('ui-state-focus'); },
+    		function () { $(this).removeClass('ui-state-focus').addClass('ui-state-default'); }
+    	);
+            // MENU	
+            $('#menu0').menu({
+                content: $('#menuItems0').html(), // grab content from this page
+                showSpeed: 10,
+                flyOut: true
+            });
+            
+        });
+    </script>
+</head>
+<body>
+    <header>
             <div class="content-wrapper">
                 <div class="float-left">
                     <p class="site-title">@Html.ActionLink(@HTBox.Web.SiteSetting.SiteName, "Index", "Home")</p>
@@ -21,30 +38,40 @@
                     <section id="login">
                         @Html.Partial("_LoginPartial")
                     </section>
-                    <nav>
-                        <ul id="menu">
-                            <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                            <li>@Html.ActionLink("About", "About", "Home")</li>
-                            <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                        </ul>
-                    </nav>
-                </div>
+                   <div style="height: 27px; width: 100%; text-align: left;" class="menu-state-container">                    <div id="menu" style="display: inline;">
+                   <a class='fg-button fg-button-icon-right ui-widget ui-state-default' id='menu0' href='#' target='_self' menuName='admin' ><span class='ui-icon ui-icon-triangle-1-s'></span>admin</a>
+                   <a class='fg-button fg-button-icon-right ui-widget ui-state-default' id='menu1' href='/workflowUI/FlowGraphList.aspx' target='_self' menuName='FlowGraphList' >FlowGraphList</a>
+                   <a class='fg-button fg-button-icon-right ui-widget ui-state-default' id='menu2' href='/workflowUI/FlowAgentList.aspx' target='_self' menuName='FlowAgentList' >FlowAgentList</a>
+                   <a class='fg-button fg-button-icon-right ui-widget ui-state-default' id='menu3' href='/workflowUI/FlowStepList.aspx' target='_self' menuName='FlowStepList' >FlowStepList</a>
+                   
+                   <div id='menuItems0' class='hidden'><ul>
+                    <li><a  href='/admin/MenuTreeEdit.aspx'  target='_self' menuName='Menu'>Menu</a></li>
+                    <li><a  href='#'  target='_self' class="ui-corner-all fg-menu-indicator" id="menu01" menuName='Menu'>Menu2<span class='ui-icon ui-icon-triangle-1-e'></span></a>
+                    <ul>
+                    <li><a  href='/admin/MenuTreeEdit.aspx'  target='_self' menuName='Menu'>Menu1111</a></li>
+                    <li><a  href='/admin/MenuTreeEdit.aspx'  target='_self' menuName='Menu'>Menu2111</a></li>
+                    </ul>
+                    </li>
+                    </ul>
+                    </div>
+
+                    </div>
+                    </div>
+                    </div>
             </div>
         </header>
-        <div id="body">
-            @RenderSection("featured", required: false)
-            <section class="content-wrapper main-content clear-fix">
+    <div id="body">
+        @RenderSection("featured", required: false)
+        <section class="content-wrapper main-content clear-fix">
                 @RenderBody()
             </section>
-        </div>
-        <footer>
+    </div>
+    <footer>
             <div class="content-wrapper">
                 <div class="float-left">
                     <p>&copy; @DateTime.Now.Year - My ASP.NET MVC Application</p>
                 </div>
             </div>
         </footer>
-
-        
-    </body>
+</body>
 </html>

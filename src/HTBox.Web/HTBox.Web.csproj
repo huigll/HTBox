@@ -223,6 +223,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\fg.menu.css" />
     <Content Include="Content\images\buttonBlue.gif" />
     <Content Include="Content\images\corners-sprite.gif" />
     <Content Include="Content\images\edit.gif" />
@@ -311,6 +312,7 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\fg.menu.js" />
     <Content Include="Scripts\jquery-2.0.3-vsdoc.js" />
     <Content Include="Scripts\jquery-2.0.3.js" />
     <Content Include="Scripts\jquery-2.0.3.min.js" />
