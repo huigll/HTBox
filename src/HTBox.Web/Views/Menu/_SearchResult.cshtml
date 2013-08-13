@@ -57,10 +57,22 @@
             <th>
             </th>
             <th>
-                Last Name
+                @Html.ActionSortLink("Name", "Search", new { @orderby = "MenuName" },
+                new
+                {
+                    @class = @Request.QueryString["orderby"] == "MenuName" ?
+                       (@Request.QueryString["desc"] == "false" ? "sasc" : "sdesc")
+                       : ""
+                }, this.Request.QueryString)
             </th>
             <th>
-                First Name
+                @Html.ActionSortLink("Url", "Search", new { @orderby = "PageUrl" },
+                new
+                {
+                    @class = @Request.QueryString["orderby"] == "PageUrl" ?
+                       (@Request.QueryString["desc"] == "false" ? "sasc" : "sdesc")
+                       : ""
+                }, this.Request.QueryString)
             </th>
             <th>
                 Enrollment Date
@@ -87,7 +99,7 @@
     </table>
 </div>
 @Html.Pager(Model.StartPageNo, Model.CurrentPageNo, Model.TotalPageNo, Model.NeedToShow, "p",this.Request.QueryString)
-<div id="delete-dialog" title="Confirmation" style="visibility:hidden">
+<div id="delete-dialog" title="Confirmation">
     <p>
         Are you sure you want to delete this Brand?</p>
 </div>

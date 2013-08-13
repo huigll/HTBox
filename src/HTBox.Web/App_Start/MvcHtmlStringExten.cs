@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Text;
 using System.Web.Mvc.Html;
 using System.Collections.Specialized;
+using System.Web.Routing;
 namespace System.Web.Mvc
 {
     public static class MvcHtmlStringExten
@@ -69,14 +70,16 @@ namespace System.Web.Mvc
             values[currentPageUrlParameter] = 1;
             foreach (string k in querystring.AllKeys)
             {
-                if (k != currentPageUrlParameter)
-                {
-                    values.Add(k, querystring[k]);
-                }
+                if(k != currentPageUrlParameter)
+                    values[k] = querystring[k];
             }
+            int left  = Math.Max(1,currentPage - pagesToShow/2);
+            int right = Math.Min(left + pagesToShow-1, totalPages);
+            if (right == totalPages)
+                left = Math.Max(1, right - pagesToShow + 1);
             StringBuilder html =
             Enumerable.Range(startPage, totalPages)
-            .Where(i => (currentPage - pagesToShow) < i & i < (currentPage + pagesToShow))
+            .Where(i => left <= i && i <= right)
             .Aggregate(new StringBuilder(@"<div class=""pager-bar""><span>当前第 " + currentPage + " 页/共 " + totalPages + " 页</span>")
             .Append(currentPage == startPage ? "<span class=\"pagerPage currentPage pagerPrefix\"> 首页 </span>" :
             helper.ActionLink("首页", actionName, controller, values, new Dictionary<string, object> 
@@ -99,10 +102,49 @@ namespace System.Web.Mvc
                 return seed;
             });
             values[currentPageUrlParameter] = totalPages;
-            html.Append(currentPage == totalPages ? "<span class=\"pagerPage currentPage pagerSubfix\"> 末页 </span>" : helper.ActionLink("末页", actionName, controller, values, new Dictionary<string, object> { { "class", "pagerPage lastPage pagerSubfix" } }).ToHtmlString())
+            html.Append(currentPage == totalPages ? "<span class=\"pagerPage currentPage pagerSubfix\"> 末页 </span>" :
+                helper.ActionLink("末页", actionName, controller, 
+                values, new Dictionary<string, object> { { "class", "pagerPage lastPage pagerSubfix" } }).ToHtmlString())
                 .Append(@"</div>");
 
             return MvcHtmlString.Create(html.ToString());
+        }
+
+
+        public static MvcHtmlString ActionSortLink(this HtmlHelper helper, string linkText, string actionName,
+            object routeValues, object htmlAttributes, NameValueCollection querystring)
+        {
+            System.Web.Routing.RouteData routeData = helper.ViewContext.RouteData;
+
+            System.Web.Routing.RouteValueDictionary values = new RouteValueDictionary(routeData.Values);
+
+            foreach (string k in querystring.AllKeys)
+            {
+                values[k] = querystring[k];
+            }
+            var curRouteValue = new System.Web.Routing.RouteValueDictionary(routeValues);
+            foreach (var item in curRouteValue)
+            {
+                values[item.Key] = item.Value;
+            }
+            var htmlAttribs = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes);
+            if (querystring["orderby"] == Convert.ToString(values["orderby"]))
+            {
+                
+                    if (Convert.ToString(values["desc"]) == "true")
+                    {
+                        values["desc"] = "false";
+                    }
+                    else
+                    {
+                        values["desc"] = "true";
+                    }
+            }
+            else
+            {
+                values["desc"] = "false";
+            }
+            return helper.ActionLink(linkText, actionName, values, htmlAttribs);
         }
     }
 }
