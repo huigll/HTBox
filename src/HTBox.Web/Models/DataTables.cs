@@ -58,7 +58,7 @@ namespace HTBox.Web.Models
                 return (from m in db.WebPagesRoles
                             where m.Deep == TreeDeep &&
                             m.Type == type &&
-                            Code.IndexOf(this.Code + "-") == 0
+                            m.Code.IndexOf(this.Code + "-") == 0
                             orderby m.IndexOrder
                             select m).ToArray();
 

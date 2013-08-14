@@ -423,6 +423,8 @@
     <Content Include="Views\UserRole\EditUser.cshtml" />
     <Content Include="Views\UserRole\EditRole.cshtml" />
     <Content Include="Views\UserRole\GetData.cshtml" />
+    <Content Include="Views\UserRole\CreateUser.cshtml" />
+    <Content Include="Views\UserRole\CreateRole.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\QQAuthentication\QQAuthentication.csproj">

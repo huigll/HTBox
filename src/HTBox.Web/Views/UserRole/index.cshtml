@@ -1,18 +1,19 @@
 ﻿@{
     ViewBag.Title = "index";
 }
-   @Styles.Render("~/Content/ztree")
-   @Scripts.Render("~/bundles/ztree")
-   @Scripts.Render("~/bundles/jqueryui")
-   @Scripts.Render("~/bundles/jqueryval")
-   
-<h2>index</h2>
-<SCRIPT type="text/javascript">
+@Styles.Render("~/Content/ztree")
+@Scripts.Render("~/bundles/ztree")
+@Scripts.Render("~/bundles/jqueryui")
+@Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/bundles/menu")
+<h2>
+    index</h2>
+<script type="text/javascript">
 		<!--
     var setting = {
         async: {
-            enable:true,
-            url: '@Url.Action("GetData","UserRole")',
+            enable: true,
+            url: '@Url.Action("GetData", "UserRole")',
             autoParam: ["id", "name"]
         },
         view: {
@@ -31,10 +32,10 @@
                 enable: true
             }
         },
-//        check: {
-//            enable: true,
-//            chkDisabledInherit: true
-//        },
+        //        check: {
+        //            enable: true,
+        //            chkDisabledInherit: true
+        //        },
         callback: {
             beforeDrag: beforeDrag,
             beforeEditName: beforeEditName,
@@ -44,29 +45,29 @@
         }
     };
 
-    
+
     var log, className = "dark";
     function beforeDrag(treeId, treeNodes) {
         return false;
     }
     function beforeEditName(treeId, treeNode) {
         className = (className === "dark" ? "" : "dark");
-        
+
         var zTree = $.fn.zTree.getZTreeObj("treeDemo");
         zTree.selectNode(treeNode);
         return confirm("Start node '" + treeNode.name + "' editorial status?");
     }
     function beforeRemove(treeId, treeNode) {
         className = (className === "dark" ? "" : "dark");
-        
+
         var zTree = $.fn.zTree.getZTreeObj("treeDemo");
         zTree.selectNode(treeNode);
         return confirm("Confirm delete node '" + treeNode.name + "' it?");
     }
     function onRemove(e, treeId, treeNode) {
-        
+
     }
-    
+
     function showRemoveBtn(treeId, treeNode) {
         return true;
     }
@@ -78,9 +79,9 @@
         clickedNode = node;
         var url;
         if (node.nodeType == "User")
-            url = '@Url.Action("EditUser","UserRole")?userid=' + node.id;
+            url = '@Url.Action("EditUser", "UserRole")?userid=' + node.id;
         else
-            url = '@Url.Action("EditRole","UserRole")?roleId=' + node.id;
+            url = '@Url.Action("EditRole", "UserRole")?roleId=' + node.id;
         var dialogDiv = $('#updateDialog');
         $.get(url, function (data) {
             dialogDiv.html(data);
@@ -92,29 +93,62 @@
             // Check document for changes
             //$.validator.unobtrusive.parse(document);
             // Re add validation with changes
-          //  $form.validate($form.data("unobtrusiveValidation").options);
+            //  $form.validate($form.data("unobtrusiveValidation").options);
             //open dialog
             dialogDiv.dialog('open');
-             });
+        });
     }
-    
+
 
     var newCount = 1;
     function addHoverDom(treeId, treeNode) {
         var sObj = $("#" + treeNode.tId + "_span");
         if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0) return;
         var addRoleStr = "<span class='button add' id='addBtn_" + treeNode.tId
-				+ "' title='add node' onfocus='this.blur();'></span>";
+				+ "' title='add Role' onfocus='this.blur();'></span>";
         sObj.after(addRoleStr);
+        var addUserStr = "<span class='button addUser' id='addUserBtn_" + treeNode.tId
+				+ "' title='add User' onfocus='this.blur();'></span>";
+        sObj.after(addUserStr);
+
         var btn = $("#addBtn_" + treeNode.tId);
         if (btn) btn.bind("click", function () {
             //var zTree = $.fn.zTree.getZTreeObj("treeDemo");
             //zTree.addNodes(treeNode, { id: (100 + newCount), pId: treeNode.id, name: "new node" + (newCount++) });
+
+            url = '@Url.Action("CreateRole", "UserRole")';
+            var dialogDiv = $('#updateDialog');
+            $.get(url, function (data) {
+                dialogDiv.html(data);
+                //validation
+                var $form = $("#updateUserForm");
+                // Unbind existing validation
+                $form.unbind();
+                $form.data("validator", null);
+                // Check document for changes
+                //$.validator.unobtrusive.parse(document);
+                // Re add validation with changes
+                //  $form.validate($form.data("unobtrusiveValidation").options);
+                //open dialog
+                dialogDiv.dialog('open');
+            });
+
+
             return false;
         });
+
+        var userbtn = $("#addUserBtn_" + treeNode.tId);
+        if (userbtn) userbtn.bind("click", function () {
+            //var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+            //zTree.addNodes(treeNode, { id: (100 + newCount), pId: treeNode.id, name: "new node" + (newCount++) });
+            alert("user");
+            return false;
+        });
+
     };
     function removeHoverDom(treeId, treeNode) {
         $("#addBtn_" + treeNode.tId).unbind().remove();
+        $("#addUserBtn_" + treeNode.tId).unbind().remove();
     };
     function selectAll() {
         var zTree = $.fn.zTree.getZTreeObj("treeDemo");
@@ -126,49 +160,49 @@
         $("#selectAll").bind("click", selectAll);
     });
 
-      function updateSuccess() {
-          if ($("#update-message").html() == "True") {
-              //we update the table's info
-              
-              var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-              zTree.editName(clickedNode);
-              if(clickedNode.nodeType == "User")
-                  zTree.cancelEditName($("#UserName").val()); //newname
-              else
-                  zTree.cancelEditName($("#RoleName").val()); //newname
-              
-              $('#updateDialog').dialog('close');
-              
-              
-          }
-          else {
-              $("#update-message").show();
-          }
-      }
-      $(function () {
-          $('#updateDialog').dialog({
-              autoOpen: false,
-              width: 400,
-              resizable: false,
-              modal: true,
-              buttons: {
-                  "Update": function () {
-                      $("#update-message").html(''); //make sure there is nothing on the message before we continue                         
-                      $("#updateUserForm").submit();
-                  },
-                  "Cancel": function () {
-                      $(this).dialog("close");
-                  }
-              }
-          });
-      });
-		//-->
-	</SCRIPT>
-<div style="display:inline;">
-        <div style="display:inline-block;width:300px;vertical-align: top;">
-		<ul id="treeDemo" class="ztree"></ul>
-        </div>
-        <div id="updateDialog" style="display:inline-block"></div>
-	</div>
+    function updateSuccess() {
+        if ($("#update-message").html() == "True") {
+            //we update the table's info
 
-    
+            var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+            zTree.editName(clickedNode);
+            if (clickedNode.nodeType == "User")
+                zTree.cancelEditName($("#UserName").val()); //newname
+            else
+                zTree.cancelEditName($("#RoleName").val()); //newname
+
+            $('#updateDialog').dialog('close');
+
+
+        }
+        else {
+            $("#update-message").show();
+        }
+    }
+    $(function () {
+        $('#updateDialog').dialog({
+            autoOpen: false,
+            width: 400,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Update": function () {
+                    $("#update-message").html(''); //make sure there is nothing on the message before we continue                         
+                    $("#updateUserForm").submit();
+                },
+                "Cancel": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+    });
+		//-->
+</script>
+<div style="display: inline;">
+    <div style="display: inline-block; width: 300px; vertical-align: top;">
+        <ul id="treeDemo" class="ztree">
+        </ul>
+    </div>
+    <div id="updateDialog" style="display: inline-block">
+    </div>
+</div>
