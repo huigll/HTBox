@@ -42,7 +42,11 @@ namespace HTBox.Web
                         "~/Content/themes/base/jquery.ui.theme.css"));
             bundles.Add(new ScriptBundle("~/bundles/menu").Include(
                         "~/Scripts/fg.menu.js"));
-            
+
+
+            bundles.Add(new ScriptBundle("~/bundles/ztree").Include("~/Scripts/jquery.ztree.*"));
+
+            bundles.Add(new StyleBundle("~/Content/ztree").Include("~/Content/zTreeStyle/zTreeStyle.css"));
         }
     }
 }

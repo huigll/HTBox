@@ -1,0 +1,45 @@
+﻿@model HTBox.Web.Models.Webpages_UserProfile
+@{
+    Layout = null;
+}
+@using (Ajax.BeginForm("EditUser", "UserRole", null,
+    new AjaxOptions
+    {
+        UpdateTargetId = "update-message",
+        InsertionMode = InsertionMode.Replace,
+        HttpMethod = "POST",
+        OnSuccess = "updateSuccess",
+        
+    },
+    new { @id = "updateUserForm" }))
+{
+    @Html.ValidationSummary(true)
+     <div id="update-message" class="error invisible"></div>
+    <fieldset>
+        <legend>Webpages_UserProfile</legend>
+        @Html.HiddenFor(model => model.UserId)
+        <div class="editor-label">
+            @Html.LabelFor(model => model.UserName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.UserName)
+            @Html.ValidationMessageFor(model => model.UserName)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Email)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Email)
+            @Html.ValidationMessageFor(model => model.Email)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.IndexOrder)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.IndexOrder)
+            @Html.ValidationMessageFor(model => model.IndexOrder)
+        </div>
+       
+    </fieldset>
+}
+

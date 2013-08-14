@@ -204,6 +204,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
+    <Compile Include="Controllers\UserRoleController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -224,6 +225,7 @@
     <Compile Include="Models\MySqlSimpleMembershipProvider.cs" />
     <Compile Include="Models\MySqlSimpleRoleProvider.cs" />
     <Compile Include="App_Start\SiteSetting.cs" />
+    <Compile Include="Models\ZTree.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\StringAnalyse.cs" />
     <Compile Include="Utility\UtilityArray.cs" />
@@ -316,6 +318,21 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
+    <Content Include="Content\zTreeStyle\img\diy\1_close.png" />
+    <Content Include="Content\zTreeStyle\img\diy\1_open.png" />
+    <Content Include="Content\zTreeStyle\img\diy\2.png" />
+    <Content Include="Content\zTreeStyle\img\diy\3.png" />
+    <Content Include="Content\zTreeStyle\img\diy\4.png" />
+    <Content Include="Content\zTreeStyle\img\diy\5.png" />
+    <Content Include="Content\zTreeStyle\img\diy\6.png" />
+    <Content Include="Content\zTreeStyle\img\diy\7.png" />
+    <Content Include="Content\zTreeStyle\img\diy\8.png" />
+    <Content Include="Content\zTreeStyle\img\diy\9.png" />
+    <Content Include="Content\zTreeStyle\img\line_conn.gif" />
+    <Content Include="Content\zTreeStyle\img\loading.gif" />
+    <Content Include="Content\zTreeStyle\img\zTreeStandard.gif" />
+    <Content Include="Content\zTreeStyle\img\zTreeStandard.png" />
+    <Content Include="Content\zTreeStyle\zTreeStyle.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\fg.menu.js" />
@@ -331,6 +348,16 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\jquery.ztree.all-3.5.js" />
+    <Content Include="Scripts\jquery.ztree.all-3.5.min.js" />
+    <Content Include="Scripts\jquery.ztree.core-3.5.js" />
+    <Content Include="Scripts\jquery.ztree.core-3.5.min.js" />
+    <Content Include="Scripts\jquery.ztree.excheck-3.5.js" />
+    <Content Include="Scripts\jquery.ztree.excheck-3.5.min.js" />
+    <Content Include="Scripts\jquery.ztree.exedit-3.5.js" />
+    <Content Include="Scripts\jquery.ztree.exedit-3.5.min.js" />
+    <Content Include="Scripts\jquery.ztree.exhide-3.5.js" />
+    <Content Include="Scripts\jquery.ztree.exhide-3.5.min.js" />
     <Content Include="Scripts\knockout-2.3.0.debug.js" />
     <Content Include="Scripts\knockout-2.3.0.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
@@ -392,6 +419,10 @@
     <Content Include="Views\Menu\_SearchResult.cshtml" />
     <Content Include="Views\Menu\_Edit.cshtml" />
     <Content Include="Views\Menu\Edit.cshtml" />
+    <Content Include="Views\UserRole\index.cshtml" />
+    <Content Include="Views\UserRole\EditUser.cshtml" />
+    <Content Include="Views\UserRole\EditRole.cshtml" />
+    <Content Include="Views\UserRole\GetData.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\QQAuthentication\QQAuthentication.csproj">

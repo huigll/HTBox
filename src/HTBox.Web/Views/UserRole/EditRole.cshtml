@@ -1,0 +1,89 @@
+﻿@model HTBox.Web.Models.Webpages_Roles
+@{
+    Layout = null;
+}
+@using (Ajax.BeginForm("EditRole", "UserRole", null,
+    new AjaxOptions
+    {
+        UpdateTargetId = "update-message",
+        InsertionMode = InsertionMode.Replace,
+        HttpMethod = "POST",
+        OnSuccess = "updateSuccess",
+
+    },
+    new { @id = "updateUserForm" }))
+{
+    @Html.ValidationSummary(true)
+    <div id="update-message" class="error invisible"></div>
+    <fieldset>
+        <legend>Webpages_Roles</legend>
+
+        @Html.HiddenFor(model => model.RoleId)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.RoleName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.RoleName)
+            @Html.ValidationMessageFor(model => model.RoleName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Type)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Type)
+            @Html.ValidationMessageFor(model => model.Type)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Code)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Code)
+            @Html.ValidationMessageFor(model => model.Code)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Deep)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Deep)
+            @Html.ValidationMessageFor(model => model.Deep)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.IndexOrder)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.IndexOrder)
+            @Html.ValidationMessageFor(model => model.IndexOrder)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Master)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Master)
+            @Html.ValidationMessageFor(model => model.Master)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Expression)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Expression)
+            @Html.ValidationMessageFor(model => model.Expression)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Remark)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Remark)
+            @Html.ValidationMessageFor(model => model.Remark)
+        </div>
+         
+    </fieldset>
+}
+
