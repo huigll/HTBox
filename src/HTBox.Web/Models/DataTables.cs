@@ -6,7 +6,7 @@ using System.Data.Entity;
 using System.Globalization;
 using System.Web.Mvc;
 using System.Web.Security;
-
+using System.Linq;
 
 namespace HTBox.Web.Models
 {
@@ -32,7 +32,6 @@ namespace HTBox.Web.Models
         public int RoleId { get; set; }
         [Required,MaxLength(128)] 
         public string RoleName { get; set; }
-
         public int Type { get; set; }
         [Required,MaxLength(128)] 
         public string Code { get; set; }
@@ -44,6 +43,73 @@ namespace HTBox.Web.Models
         [MaxLength(4000)] 
         public string Expression { get; set; }
         public string Remark { get; set; }
+
+
+        public Webpages_Roles[] GetOneFloorGroups(WebPagesContext db=null)
+        {
+            bool flag = db == null;
+            try
+            {
+                if (flag) db = new WebPagesContext();
+                string[] tmp = this.Code.Split('-');
+                int TreeDeep = tmp.Length;
+                int type = Convert.ToInt32(tmp[0]);
+
+                return (from m in db.WebPagesRoles
+                            where m.Deep == TreeDeep &&
+                            m.Type == type &&
+                            Code.IndexOf(this.Code + "-") == 0
+                            orderby m.IndexOrder
+                            select m).ToArray();
+
+
+            }
+            finally
+            {
+                if (flag)
+                    db.Dispose();
+            }
+        }
+
+        public Webpages_UserProfile[] GetUsers(bool isWhole, WebPagesContext db = null)
+        {
+            bool flag = db == null;
+            try
+            {
+                if (flag) db = new WebPagesContext();
+                string[] tmp = this.Code.Split('-');
+                int TreeDeep = tmp.Length;
+                int type = Convert.ToInt32(tmp[0]);
+                IQueryable<Webpages_Roles> allRoles;
+                if (isWhole)
+                {
+                    allRoles = from g in db.WebPagesRoles
+                               where g.Code == Code ||
+                               g.Code.IndexOf(Code + "-") == 0
+
+                               select g;
+                }
+                else
+                {
+                    allRoles = from g in db.WebPagesRoles
+                               where g.Code == Code select g;
+                }
+                var allUser = (from u in db.UserProfiles
+                               from map in db.WebPagesUsersInRoles
+                               from al in allRoles
+                               where u.UserId == map.UserId &&
+                               map.RoleId == al.RoleId
+                               orderby u.IndexOrder
+                               select u).ToArray();
+                return allUser;
+
+            }
+            finally
+            {
+                if (flag)
+                    db.Dispose();
+            }
+        }
     }
     [Table("webpages_UsersInRoles")]
     public class Webpages_UsersInRoles
@@ -110,8 +176,9 @@ namespace HTBox.Web.Models
         public int? ParentId { get; set; }
         public string PageUrl { get; set; }
         public bool IsHidden { get; set; }
-        public int Order { get; set; }
-
+        public int OrderIndex { get; set; }
+        [MaxLength(50)]
+        public string OpenTarget { get; set; }
 
     }
     [Table("webpages_MenuTreeRight")]
@@ -155,5 +222,53 @@ namespace HTBox.Web.Models
 
         [Required]
         public int Type { get; set; }
+
+
+        public static Webpages_VUser CreateOrGetByUserId(int userid)
+        {
+            using (var db = new WebPagesContext())
+            {
+                var vuser = db.Webpages_VUsers.FirstOrDefault(o => o.UserID == userid);
+                if (vuser != null)
+                    return vuser;
+                vuser = new Webpages_VUser();
+                vuser.UserID = userid;
+                vuser.Type = (int)VUserType.User;
+                db.Webpages_VUsers.Add(vuser);
+                db.SaveChanges();
+                return vuser;
+            }
+        }
+        public static Webpages_VUser CreateOrGetByGroupId(int groupId)
+        {
+            using (var db = new WebPagesContext())
+            {
+                var vuser = db.Webpages_VUsers.FirstOrDefault(o => o.RoleID == groupId);
+                if (vuser != null)
+                    return vuser;
+                vuser = new Webpages_VUser();
+                vuser.RoleID = groupId;
+                vuser.Type = (int)VUserType.Group;
+                db.Webpages_VUsers.Add(vuser);
+                db.SaveChanges();
+                return vuser;
+            }
+        }
+        
+    }
+
+    /// <summary>
+    /// Virtual user type
+    /// </summary>
+    public enum VUserType
+    {
+        /// <summary>
+        /// User
+        /// </summary>
+        User = 1,
+        /// <summary>
+        /// Group
+        /// </summary>
+        Group = 2
     }
 }

@@ -200,7 +200,7 @@ namespace HTBox.Web.Models
                     where r.RoleName == roleName
                     select u.UserName).ToArray();
         }
-
+       
         public override bool IsUserInRole(string username, string roleName)
         {
             if (preProvider != null)

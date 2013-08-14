@@ -215,12 +215,18 @@
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\DataTables.cs" />
-    <Compile Include="Models\MemberAuthorContext.cs" />
+    <Compile Include="Models\FunctionAllocate.cs" />
+    <Compile Include="Models\MenuTreeCtrl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\WebPagesContext.cs" />
     <Compile Include="Models\Menu.cs" />
     <Compile Include="Models\MySqlSimpleMembershipProvider.cs" />
     <Compile Include="Models\MySqlSimpleRoleProvider.cs" />
     <Compile Include="App_Start\SiteSetting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utility\StringAnalyse.cs" />
+    <Compile Include="Utility\UtilityArray.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\fg.menu.css" />
