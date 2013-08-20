@@ -95,7 +95,7 @@
             // Re add validation with changes
             //  $form.validate($form.data("unobtrusiveValidation").options);
             //open dialog
-            dialogDiv.dialog('open');
+           // dialogDiv.dialog('open');
         });
     }
 
@@ -139,9 +139,22 @@
 
         var userbtn = $("#addUserBtn_" + treeNode.tId);
         if (userbtn) userbtn.bind("click", function () {
-            //var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-            //zTree.addNodes(treeNode, { id: (100 + newCount), pId: treeNode.id, name: "new node" + (newCount++) });
-            alert("user");
+            url = '@Url.Action("CreateUser", "UserRole")';
+            var dialogDiv = $('#updateDialog');
+            $.get(url, function (data) {
+                dialogDiv.html(data);
+                //validation
+                var $form = $("#updateUserForm");
+                // Unbind existing validation
+                $form.unbind();
+                $form.data("validator", null);
+                // Check document for changes
+                //$.validator.unobtrusive.parse(document);
+                // Re add validation with changes
+                //  $form.validate($form.data("unobtrusiveValidation").options);
+                //open dialog
+                dialogDiv.dialog('open');
+            });
             return false;
         });
 
@@ -171,31 +184,31 @@
             else
                 zTree.cancelEditName($("#RoleName").val()); //newname
 
-            $('#updateDialog').dialog('close');
-
+            //$('#updateDialog').dialog('close');
+            $("#update-message").html("");
 
         }
         else {
             $("#update-message").show();
         }
     }
-    $(function () {
-        $('#updateDialog').dialog({
-            autoOpen: false,
-            width: 400,
-            resizable: false,
-            modal: true,
-            buttons: {
-                "Update": function () {
-                    $("#update-message").html(''); //make sure there is nothing on the message before we continue                         
-                    $("#updateUserForm").submit();
-                },
-                "Cancel": function () {
-                    $(this).dialog("close");
-                }
-            }
-        });
-    });
+//    $(function () {
+//        $('#updateDialog').dialog({
+//            autoOpen: false,
+//            width: 400,
+//            resizable: false,
+//            modal: true,
+//            buttons: {
+//                "Update": function () {
+//                    $("#update-message").html(''); //make sure there is nothing on the message before we continue                         
+//                    $("#updateUserForm").submit();
+//                },
+//                "Cancel": function () {
+//                    $(this).dialog("close");
+//                }
+//            }
+//        });
+//    });
 		//-->
 </script>
 <div style="display: inline;">

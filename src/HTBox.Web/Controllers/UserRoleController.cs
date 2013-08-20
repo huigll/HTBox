@@ -21,7 +21,7 @@ namespace HTBox.Web.Controllers
 
         public ActionResult GetData(string code = null)
         {
-            IQueryable<Webpages_Roles> allRoles;
+            IEnumerable<Webpages_Roles> allRoles;
             if (code == null)
                 allRoles = db.WebPagesRoles.Where(o => o.Deep == 0);
             else
@@ -34,19 +34,22 @@ namespace HTBox.Web.Controllers
             }
             else
             {
+                Func<IEnumerable<Webpages_Roles>, int?, bool> f = null;
 
-                foreach (var r in allRoles)
-                {
-                    list.Add(new ZTree(r));
-                    foreach (var r1 in r.GetOneFloorGroups())
+                f = (n,parent) =>
                     {
-                        var z1 = new ZTree(r1);
-                        z1.ParentId = r.RoleId;
-                        list.Add(z1);
-                    }
-                }
-            }
+                        foreach (var r in n)
+                        {
+                            var z = new ZTree(r);
+                            z.ParentId = parent;
+                            list.Add(z);
+                            f(r.GetOneFloorGroups(),r.RoleId);
 
+                        }
+                        return true;
+                    };
+                f(allRoles,null);
+            }
             return Content(JsonConvert.SerializeObject(list), "application/json");
         }
 
