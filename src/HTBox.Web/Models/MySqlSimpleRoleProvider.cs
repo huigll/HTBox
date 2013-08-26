@@ -64,7 +64,7 @@ namespace HTBox.Web.Models
                     dbContext.WebPagesUsersInRoles.Add(new Webpages_UsersInRoles()
                     {
                         UserId = user.UserId,
-                        RoleId = role.RoleId
+                        RoleCode = role.Code
                     });
 
                 }
@@ -141,7 +141,7 @@ namespace HTBox.Web.Models
             if (role == null)
                 return false;
 
-            var uirs = from uir in dbContext.WebPagesUsersInRoles where uir.RoleId == role.RoleId select uir;
+            var uirs = from uir in dbContext.WebPagesUsersInRoles where uir.RoleCode == role.Code select uir;
             if (throwOnPopulatedRole && uirs.Any())
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture,
                 SimpleRoleProvder_RolePopulated, new object[] { roleName }));
@@ -164,7 +164,7 @@ namespace HTBox.Web.Models
 
             return (from u in dbContext.UserProfiles
                     join uir in dbContext.WebPagesUsersInRoles on u.UserId equals uir.UserId
-                    join r in dbContext.WebPagesRoles on uir.RoleId equals r.RoleId
+                    join r in dbContext.WebPagesRoles on uir.RoleCode equals r.Code
                     where r.RoleName == roleName && SqlMethods.Like(u.UserName, usernameToMatch)
                     select u.UserName).ToArray();
         }
@@ -183,7 +183,7 @@ namespace HTBox.Web.Models
                 return preProvider.GetRolesForUser(username);
 
             return (from r in dbContext.WebPagesRoles
-                    join uir in dbContext.WebPagesUsersInRoles on r.RoleId equals uir.RoleId
+                    join uir in dbContext.WebPagesUsersInRoles on r.Code equals uir.RoleCode
                     join u in dbContext.UserProfiles on uir.UserId equals u.UserId
                     where u.UserName == username
                     select r.RoleName).Distinct().ToArray();
@@ -196,7 +196,7 @@ namespace HTBox.Web.Models
 
             return (from u in dbContext.UserProfiles
                     join uir in dbContext.WebPagesUsersInRoles on u.UserId equals uir.UserId
-                    join r in dbContext.WebPagesRoles on uir.RoleId equals r.RoleId
+                    join r in dbContext.WebPagesRoles on uir.RoleCode equals r.Code
                     where r.RoleName == roleName
                     select u.UserName).ToArray();
         }
@@ -208,7 +208,7 @@ namespace HTBox.Web.Models
 
             return (from u in dbContext.UserProfiles
                     join uir in dbContext.WebPagesUsersInRoles on u.UserId equals uir.UserId
-                    join r in dbContext.WebPagesRoles on uir.RoleId equals r.RoleId
+                    join r in dbContext.WebPagesRoles on uir.RoleCode equals r.Code
                     where u.UserName == username && r.RoleName == roleName
                     select u).Any();
         }
@@ -246,7 +246,8 @@ namespace HTBox.Web.Models
                 foreach (var role in roles)
                 {
                     dbContext.WebPagesUsersInRoles.Remove((from uir in dbContext.WebPagesUsersInRoles
-                                                            where uir.RoleId == role.RoleId && uir.UserId == user.UserId
+                                                            where uir.RoleCode == role.Code && 
+                                                            uir.UserId == user.UserId
                                                             select uir).FirstOrDefault());
                 }
             }

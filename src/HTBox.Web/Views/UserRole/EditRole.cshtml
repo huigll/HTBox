@@ -18,7 +18,13 @@
     <fieldset>
         <legend>Webpages_Roles</legend>
 
-        @Html.HiddenFor(model => model.RoleId)
+         <div class="editor-label">
+            @Html.LabelFor(model => model.Code)
+        </div>
+        <div class="editor-field">
+            @Html.DisplayTextFor(model => model.Code)
+            @Html.HiddenFor(model => model.Code)
+        </div>
 
         <div class="editor-label">
             @Html.LabelFor(model => model.RoleName)
@@ -26,30 +32,6 @@
         <div class="editor-field">
             @Html.EditorFor(model => model.RoleName)
             @Html.ValidationMessageFor(model => model.RoleName)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Type)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Type)
-            @Html.ValidationMessageFor(model => model.Type)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Code)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Code)
-            @Html.ValidationMessageFor(model => model.Code)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Deep)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Deep)
-            @Html.ValidationMessageFor(model => model.Deep)
         </div>
 
         <div class="editor-label">

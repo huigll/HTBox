@@ -272,7 +272,7 @@ namespace HTBox.Web.Models
                     foreach (var role in list)
                     {
 
-                        var tmp = Webpages_VUser.CreateOrGetByGroupId(role.RoleId);
+                        var tmp = Webpages_VUser.CreateOrGetByGroupId(role.Code);
 
                         GpCodeRelation Rel = GetTwoRelaction(tmp.VUserId, smallCode);
                         if (Rel == GpCodeRelation.Equality)

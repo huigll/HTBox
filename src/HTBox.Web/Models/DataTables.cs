@@ -27,13 +27,11 @@ namespace HTBox.Web.Models
     [Table("webpages_Roles")]
     public class Webpages_Roles
     {
-        [Key]
-        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
-        public int RoleId { get; set; }
         [Required,MaxLength(128)] 
         public string RoleName { get; set; }
         public int Type { get; set; }
-        [Required,MaxLength(128)] 
+        [Key]
+        [MaxLength(128)]
         public string Code { get; set; }
         [Required]
         public int Deep { get; set; }
@@ -130,7 +128,7 @@ namespace HTBox.Web.Models
                                from map in db.WebPagesUsersInRoles
                                from al in allRoles
                                where u.UserId == map.UserId &&
-                               map.RoleId == al.RoleId
+                               map.RoleCode == al.Code
                                orderby u.IndexOrder
                                select u).ToArray();
                 return allUser;
@@ -151,7 +149,7 @@ namespace HTBox.Web.Models
         public int UserId { get; set; }
         [Key, Column(Order = 1)]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.None)]
-        public int RoleId { get; set; }
+        public String RoleCode { get; set; }
     }
     [Table("webpages_OAuthMembership")]
     public class Webpages_OAuthMembership
@@ -243,7 +241,7 @@ namespace HTBox.Web.Models
         public Webpages_Roles Role { get; set; }
 
         
-        public int RoleID { get; set; }
+        public string RoleID { get; set; }
 
 
         [ForeignKey("UserID")]
@@ -271,15 +269,15 @@ namespace HTBox.Web.Models
                 return vuser;
             }
         }
-        public static Webpages_VUser CreateOrGetByGroupId(int groupId)
+        public static Webpages_VUser CreateOrGetByGroupId(string groupCode)
         {
             using (var db = new WebPagesContext())
             {
-                var vuser = db.Webpages_VUsers.FirstOrDefault(o => o.RoleID == groupId);
+                var vuser = db.Webpages_VUsers.FirstOrDefault(o => o.RoleID == groupCode);
                 if (vuser != null)
                     return vuser;
                 vuser = new Webpages_VUser();
-                vuser.RoleID = groupId;
+                vuser.RoleID = groupCode;
                 vuser.Type = (int)VUserType.Group;
                 db.Webpages_VUsers.Add(vuser);
                 db.SaveChanges();

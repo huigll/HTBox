@@ -128,7 +128,7 @@ namespace HTBox.Web.Models
                         }
                         else
                         {
-                            Webpages_Roles vGroup = db.WebPagesRoles.FirstOrDefault(o => o.RoleId == vuser.RoleID);
+                            Webpages_Roles vGroup = db.WebPagesRoles.FirstOrDefault(o => o.Code == vuser.RoleID);
                             if (IsGroupInGroup(vuser.Role.Code, group.Code))
                             {
                                 IsAdmin = true;

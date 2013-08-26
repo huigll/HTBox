@@ -14,7 +14,7 @@
         async: {
             enable: true,
             url: '@Url.Action("GetData", "UserRole")',
-            autoParam: ["id", "name"]
+            autoParam: ["id", "name=n"]
         },
         view: {
             addHoverDom: addHoverDom,
@@ -65,11 +65,16 @@
         return confirm("Confirm delete node '" + treeNode.name + "' it?");
     }
     function onRemove(e, treeId, treeNode) {
-
+        var url;
+        if (treeNode.nodeType == "User")
+            url = '@Url.Action("DeleteUser", "UserRole")?userid=' + treeNode.id;
+        else
+            url = '@Url.Action("DeleteRole", "UserRole")?roleCode=' + treeNode.id;
+        $.get(url);
     }
 
     function showRemoveBtn(treeId, treeNode) {
-        return true;
+        return !( treeNode.children);
     }
     function showRenameBtn(treeId, treeNode) {
         return false;
@@ -81,7 +86,7 @@
         if (node.nodeType == "User")
             url = '@Url.Action("EditUser", "UserRole")?userid=' + node.id;
         else
-            url = '@Url.Action("EditRole", "UserRole")?roleId=' + node.id;
+            url = '@Url.Action("EditRole", "UserRole")?roleCode=' + node.id;
         var dialogDiv = $('#updateDialog');
         $.get(url, function (data) {
             dialogDiv.html(data);
@@ -116,7 +121,7 @@
             //var zTree = $.fn.zTree.getZTreeObj("treeDemo");
             //zTree.addNodes(treeNode, { id: (100 + newCount), pId: treeNode.id, name: "new node" + (newCount++) });
 
-            url = '@Url.Action("CreateRole", "UserRole")';
+            url = '@Url.Action("CreateRole", "UserRole")?parentNodeCode=' + treeNode.id;
             var dialogDiv = $('#updateDialog');
             $.get(url, function (data) {
                 dialogDiv.html(data);
@@ -130,7 +135,7 @@
                 // Re add validation with changes
                 //  $form.validate($form.data("unobtrusiveValidation").options);
                 //open dialog
-                dialogDiv.dialog('open');
+                //dialogDiv.dialog('open');
             });
 
 
@@ -139,7 +144,7 @@
 
         var userbtn = $("#addUserBtn_" + treeNode.tId);
         if (userbtn) userbtn.bind("click", function () {
-            url = '@Url.Action("CreateUser", "UserRole")';
+            url = '@Url.Action("CreateUser", "UserRole")?code=' + treeNode.id;
             var dialogDiv = $('#updateDialog');
             $.get(url, function (data) {
                 dialogDiv.html(data);
@@ -153,7 +158,7 @@
                 // Re add validation with changes
                 //  $form.validate($form.data("unobtrusiveValidation").options);
                 //open dialog
-                dialogDiv.dialog('open');
+                //dialogDiv.dialog('open');
             });
             return false;
         });
@@ -192,6 +197,24 @@
             $("#update-message").show();
         }
     }
+    function addSuccess() {
+        if ($("#update-message").html() == "True") {
+            //we update the table's info
+
+            var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+
+            zTree.reAsyncChildNodes(clickedNode, "refresh", false);
+
+            //$('#updateDialog').dialog('close');
+            $("#update-message").html("");
+
+        }
+        else {
+            $("#update-message").show();
+        }
+    }
+
+
 //    $(function () {
 //        $('#updateDialog').dialog({
 //            autoOpen: false,

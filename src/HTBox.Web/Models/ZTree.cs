@@ -13,11 +13,11 @@ namespace HTBox.Web.Models
     public class ZTree
     {
         [JsonProperty("id")]
-        public int ID { get; set; }
+        public string ID { get; set; }
         [JsonProperty("name")]
         public string Name { get; set; }
         [JsonProperty("pId")]
-        public int? ParentId { get; set; }
+        public String ParentId { get; set; }
         [JsonProperty("url")]
         public string Url { get; set; }
         [JsonProperty("icon")]
@@ -32,14 +32,14 @@ namespace HTBox.Web.Models
 
         public ZTree(Webpages_Roles role)
         {
-            ID = role.RoleId;
+            ID = role.Code;
             Name = role.RoleName;
             NodeType = "Role";
         }
 
         public ZTree(Webpages_UserProfile user)
         {
-            ID = user.UserId;
+            ID = user.UserId.ToString();
             Name = user.UserName;
             NodeType = "User";
         }
