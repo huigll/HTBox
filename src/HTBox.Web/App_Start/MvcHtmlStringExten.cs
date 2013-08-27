@@ -11,6 +11,7 @@ using HTBox.Web.Models;
 using HTBox.Web.Lan;
 
 using System.Web.Caching;
+using System.Collections;
 namespace System.Web.Mvc
 {
     public static class MvcHtmlStringExten
@@ -191,6 +192,22 @@ namespace System.Web.Mvc
             return MvcHtmlString.Create(script);
 
 
+        }
+
+        public static void ClearMenuTreeCache()
+        {
+            List<string> cacheKeys = new List<string>();
+            IDictionaryEnumerator cacheEnum = HttpContext.Current.Cache.GetEnumerator();
+            while (cacheEnum.MoveNext())
+            {
+                cacheKeys.Add(cacheEnum.Key.ToString());
+            }
+            string cacheKeyPrefix = "UserMenuTree_";
+            foreach (string cacheKey in cacheKeys)
+            {
+                if (cacheKey.StartsWith(cacheKeyPrefix) )
+                    HttpContext.Current.Cache.Remove(cacheKey);
+            }
         }
         private static string BindMenu(string userName, out string menuScript)
         {

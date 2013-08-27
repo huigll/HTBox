@@ -15,20 +15,6 @@
     @Scripts.Render("~/bundles/modernizr")
     @RenderSection("scripts", required: false)
     <script type="text/javascript">
-//        $(function () {
-//            // BUTTON
-//            $('.fg-button').hover(
-//    		function () { $(this).removeClass('ui-state-default').addClass('ui-state-focus'); },
-//    		function () { $(this).removeClass('ui-state-focus').addClass('ui-state-default'); }
-//    	);
-//            // MENU	
-//            $('#menu0').menu({
-//                content: $('#menuItems0').html(), // grab content from this page
-//                showSpeed: 10,
-//                flyOut: true
-//            });
-
-        //        });
         @Html.GetMenuScript(User.Identity.Name);
     </script>
 </head>

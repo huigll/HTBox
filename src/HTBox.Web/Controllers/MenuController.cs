@@ -41,7 +41,11 @@ namespace HTBox.Web.Controllers
 
             db.MenuTrees.Add(menu);
             db.SaveChanges();
+            string parentid = Request.QueryString["parentid"];
+            if (!string.IsNullOrEmpty(parentid))
+                return RedirectToAction("index", new {@parentId=parentid });
             return RedirectToAction("index");
+            
 
         }
         public ActionResult Edit(int id)
@@ -61,9 +65,13 @@ namespace HTBox.Web.Controllers
 
                 db.Entry(menu).State = System.Data.EntityState.Modified;
                 db.SaveChanges();
+                string parentid = Request.QueryString["parentid"];
+                if(!string.IsNullOrEmpty(parentid))
+                    return RedirectToAction("index", new { @parentId = parentid });
                 return RedirectToAction("index");
 
             }
+            MenuNavigation.ClearMenuTreeCache();
             return View(menu);
         }
 
