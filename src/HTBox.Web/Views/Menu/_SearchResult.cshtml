@@ -21,8 +21,14 @@
                             <td width="15%" class="x-content-body-label">
                                 <span>Name</span>
                             </td>
-                            <td width="85%">
+                            <td width="35%">
                                 @Html.TextBox("Name", @Request.QueryString["name"])
+                            </td>
+                             <td width="15%" class="x-content-body-label">
+                                <span>Url</span>
+                            </td>
+                            <td width="35%">
+                                @Html.TextBox("Url", @Request.QueryString["Url"])
                             </td>
                         </tr>
                     </table>
@@ -36,6 +42,7 @@
                         <table cellpadding="0">
                             <tr>
                                 <td>
+                                @Html.Hidden("parentId",Request.QueryString["parentid"])
                                     <input type="submit" value="Search" />
                                 </td>
                                 <td>
@@ -90,6 +97,15 @@
                        : ""
                 }, this.Request.QueryString)
             </th>
+             <th>
+                @Html.ActionSortLink("Order", "Search", new { @orderby = "OrderIndex" },
+                new
+                {
+                    @class = @Request.QueryString["orderby"] == "OrderIndex" ?
+                       (@Request.QueryString["desc"] == "false" ? "sasc" : "sdesc")
+                       : ""
+                }, this.Request.QueryString)
+            </th>
             <th width="25px">
                 Add
             </th>
@@ -119,6 +135,9 @@
                 </td>
                 <td>
                     @Html.DisplayTextFor(modelItem => item.IsPublic)
+                </td>
+                <td>
+                    @Html.DisplayTextFor(modelItem => item.OrderIndex)
                 </td>
                 <td>
                     @Html.ActionLink("Add", "Create", new { parentId = item.MenuId })

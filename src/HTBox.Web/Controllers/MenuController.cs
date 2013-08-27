@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using HTBox.Web.Models;
 using HTBox.Web.App_Start;
+using System.Linq.Expressions;
+using LinqKit;
 namespace HTBox.Web.Controllers
 {
     public class MenuController : Controller
@@ -21,15 +23,27 @@ namespace HTBox.Web.Controllers
             m.StartPageNo = 1;
             m.NeedToShow = 10;
             if (p > 0) p--;
+            Expression<Func<MenuTree, bool>> where ;
+            if (parentID.HasValue)
+                where = o => o.ParentId == parentID.Value;
+            else
+                where = o => o.ParentId == null;
             m.Menus = db.MenuTrees
-                .Where(o=> parentID.HasValue ?o.ParentId == parentID.Value:o.ParentId == null)
+                .Where(where)
                 .OrderBy(orderby, desc).Skip(pageSize * p).Take(pageSize).ToList();
-            m.TotalPageNo = CountTotalPage(db.MenuTrees.Where(o => parentID.HasValue ? o.ParentId == parentID.Value : o.ParentId == null).Count(), pageSize);
+            m.TotalPageNo = CountTotalPage(db.MenuTrees.Where(where).Count(), pageSize);
             return View(m);
         }
         private static int CountTotalPage(int rowCount, int pageSize)
         {
-            if (rowCount % pageSize == 0) { return rowCount / pageSize; } else { return rowCount / pageSize + 1; }
+            if (rowCount % pageSize == 0)
+            {
+                return rowCount / pageSize;
+            }
+            else
+            {
+                return rowCount / pageSize + 1;
+            }
         }
         public ActionResult Create()
         {
@@ -86,7 +100,8 @@ namespace HTBox.Web.Controllers
         }
 
 
-        public ActionResult Search(string name="",int?parentID=null, int p = 1, int pageSize = 10,string orderby="MenuId",bool desc=false)
+        public ActionResult Search(string name = "", string Url="", int? parentID = null, 
+            int p = 1, int pageSize = 10,string orderby="MenuId",bool desc=false)
         {
 
             WebMenu m = new WebMenu();
@@ -95,22 +110,25 @@ namespace HTBox.Web.Controllers
             m.StartPageNo = 1;
             m.NeedToShow = 10;
             if (p > 0) p--;
-            var query = db.MenuTrees.Where(o=> parentID.HasValue ?o.ParentId == parentID.Value:o.ParentId == null);
+
+            Expression<Func<MenuTree, bool>> where;
+            if (parentID.HasValue)
+                where = o => o.ParentId == parentID.Value;
+            else
+                where = o => o.ParentId == null;
+
             if (!string.IsNullOrEmpty(name))
             {
-                
-                m.TotalPageNo = CountTotalPage(query.Where
-                    (o => o.MenuName.IndexOf(name) != -1).Count(), pageSize);
-                m.Menus = query.Where
-                    (o => o.MenuName.IndexOf(name) != -1)
-                    .OrderBy(orderby,desc).Skip(pageSize * p).Take(pageSize).ToList();
+                where =where.And(o => o.MenuName.Contains(name));
             }
-            else
+            if (!string.IsNullOrEmpty(Url))
             {
-                m.TotalPageNo = CountTotalPage(query.Count(), pageSize);
-                m.Menus = query.OrderBy(orderby, desc).
-                    Skip(pageSize * p).Take(pageSize).ToList();
+                where = where.And(o => o.PageUrl.Contains(Url));
             }
+            var query = db.MenuTrees.AsExpandable().Where(where);
+
+            m.TotalPageNo = CountTotalPage(query.Count(), pageSize);
+            m.Menus = query.OrderBy(orderby, desc).Skip(pageSize * p).Take(pageSize).ToList();
 
             return View(m);
         }
