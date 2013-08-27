@@ -1,6 +1,7 @@
 ﻿@model HTBox.Web.Models.MenuTree
 
-@using (Html.BeginForm()) {
+@using (Html.BeginForm(new { parentId = Request.QueryString["parentId"] }))
+{
     @Html.AntiForgeryToken()
     @Html.ValidationSummary()
     @Html.HiddenFor(model => model.MenuId)
@@ -36,9 +37,14 @@
                 @Html.LabelFor(m => m.IsHidden)
                 @Html.CheckBoxFor(m => m.IsHidden)
             </li>
+
+              <li>
+                @Html.LabelFor(m => m.IsPublic)
+                @Html.CheckBoxFor(m => m.IsPublic)
+            </li>
         </ol>
         <input type="submit" value="Save" />
-        <input type="button" onclick="window.location.href='@Url.Action("Index", "Menu")'; return false;" value="Cancel" class="cancel" />
+        <input type="button" onclick="window.location.href='@Url.Action("Index", "Menu", new { parentId = Request.QueryString["parentId"] })'; return false;" value="Cancel" class="cancel" />
     </fieldset>
 }
 

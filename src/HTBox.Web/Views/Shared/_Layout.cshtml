@@ -15,20 +15,21 @@
     @Scripts.Render("~/bundles/modernizr")
     @RenderSection("scripts", required: false)
     <script type="text/javascript">
-        $(function () {
-            // BUTTON
-            $('.fg-button').hover(
-    		function () { $(this).removeClass('ui-state-default').addClass('ui-state-focus'); },
-    		function () { $(this).removeClass('ui-state-focus').addClass('ui-state-default'); }
-    	);
-            // MENU	
-            $('#menu0').menu({
-                content: $('#menuItems0').html(), // grab content from this page
-                showSpeed: 10,
-                flyOut: true
-            });
+//        $(function () {
+//            // BUTTON
+//            $('.fg-button').hover(
+//    		function () { $(this).removeClass('ui-state-default').addClass('ui-state-focus'); },
+//    		function () { $(this).removeClass('ui-state-focus').addClass('ui-state-default'); }
+//    	);
+//            // MENU	
+//            $('#menu0').menu({
+//                content: $('#menuItems0').html(), // grab content from this page
+//                showSpeed: 10,
+//                flyOut: true
+//            });
 
-        });
+        //        });
+        @Html.GetMenuScript(User.Identity.Name);
     </script>
 </head>
 <body>
@@ -42,24 +43,7 @@
                         @Html.Partial("_LoginPartial")
                     </section>
                    <div style="height: 27px; width: 100%; text-align: left;" class="menu-state-container">                    <div id="menu" style="display: inline;">
-                   <a class='fg-button fg-button-icon-right ui-widget ui-state-default' id='menu0' href='#' target='_self' menuName='admin' ><span class='ui-icon ui-icon-triangle-1-s'></span>admin</a>
-                   <a class='fg-button fg-button-icon-right ui-widget ui-state-default' id='menu1' href='/workflowUI/FlowGraphList.aspx' target='_self' menuName='FlowGraphList' >FlowGraphList</a>
-                   <a class='fg-button fg-button-icon-right ui-widget ui-state-default' id='menu2' href='/workflowUI/FlowAgentList.aspx' target='_self' menuName='FlowAgentList' >FlowAgentList</a>
-                   <a class='fg-button fg-button-icon-right ui-widget ui-state-default' id='menu3' href='/workflowUI/FlowStepList.aspx' target='_self' menuName='FlowStepList' >FlowStepList</a>
-                   
-                   <div id='menuItems0' class='hidden'><ul>
-                    <li><a  href='/admin/MenuTreeEdit.aspx'  target='_self' menuName='Menu'>Menu</a></li>
-                    <li><a  href='#'  target='_self' class="ui-corner-all fg-menu-indicator" id="menu01" menuName='Menu'>Menu2<span class='ui-icon ui-icon-triangle-1-e'></span></a>
-                    <ul>
-                    <li><a  href='/admin/MenuTreeEdit.aspx'  target='_self' menuName='Menu'>Menu1111</a></li>
-                    <li><a  href='/admin/MenuTreeEdit.aspx'  target='_self' menuName='Menu'>Menu2111</a></li>
-                    </ul>
-                    </li>
-                    </ul>
-                    </div>
-
-                    </div>
-                    </div>
+                    @Html.GetMenuHtml(User.Identity.Name);
                     </div>
             </div>
         </header>

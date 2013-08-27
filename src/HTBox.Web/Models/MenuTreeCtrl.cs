@@ -44,16 +44,16 @@ namespace HTBox.Web.Models
         /// </summary>
         /// <param name="RootID">节点ID</param>
         /// <returns>节点RootID的下一层节点的数据集</returns>
-        public static MenuTree[] GetOneFloorByRootCode(int RootID)
+        public static MenuTree[] GetOneFloorByRootID(int RootID,bool isPublic=false)
         {
             if (RootID < 0 && RootID != TreeRootID)//当节点值<0并且又不是主根节点时
                 return null;
             using (var db = new WebPagesContext())
             {
                 if (RootID != TreeRootID)
-                    return db.MenuTrees.Where(o => o.ParentId == RootID).OrderBy(o => o.OrderIndex).ToArray();
+                    return db.MenuTrees.Where(o => o.ParentId == RootID && o.IsPublic == isPublic).OrderBy(o => o.OrderIndex).ToArray();
                 else
-                    return db.MenuTrees.Where(o => o.ParentId == null).OrderBy(o => o.OrderIndex).ToArray();
+                    return db.MenuTrees.Where(o => o.ParentId == null && o.IsPublic == isPublic).OrderBy(o => o.OrderIndex).ToArray();
             }
         }
         /// <summary>
@@ -62,11 +62,11 @@ namespace HTBox.Web.Models
         /// <param name="RootID">节点ID</param>
         /// <param name="userid">用户ID</param>
         /// <returns>节点RootID的下一层节点的数据集</returns>
-        public static MenuTree[] GetOneFloorByRootCode(int RootID, int userid)
+        public static MenuTree[] GetOneFloorByRootID(int RootID, int userid)
         {
             if (RootID < 0 && RootID != TreeRootID)//当节点值<0并且又不是主根节点时
                 return null;
-            MenuTree[] trees = GetOneFloorByRootCode(RootID);
+            MenuTree[] trees = GetOneFloorByRootID(RootID);
             List<MenuTree> list = new List<MenuTree>(trees);
             for (int i = 0; i < list.Count; )
             {
@@ -82,32 +82,64 @@ namespace HTBox.Web.Models
             return list.ToArray();
 
         }
+        public static void GetPublicMenuTree(ref TreeView treeview, string AppVirtualPath, int rootID, bool chechBox,
+            bool isAddUrl, bool isShowAllAndSelectOwner)
+        {
+            MenuTree[] trees = GetOneFloorByRootID(rootID, true);
 
-        /// <summary>
-        /// 取得用户ID为GroupCode的功能树
-        /// </summary>
-        /// <param name="treeview">引用的TreeView</param>
-        /// <param name="AppVirtualPath">程序运行的虚拟路径名称</param>
-        /// <param name="GroupCode">用户</param>
-        /// <param name="RootID">要取得从哪个节点开始的树</param>
-        /// <param name="ChechBox">树是否显示CheckBox</param>
-        /// <param name="isAddUrl">是不是添加节点信息中的Url</param>
-        /// <param name="isShowAllAndSelectOwner">如果本节点的角色列表中
-        /// 包含此用户或者角色，
-        /// 是不是选中本节点</param>
-        public static void GetUserMenuTree(ref TreeView treeview, string AppVirtualPath,
-            int vuserId, int RootID, bool ChechBox, bool isAddUrl,
+            Func<TreeNode,int, bool> f = null;
+
+            f = (node, rootId) =>
+            {
+                var subTrees = GetOneFloorByRootID(rootId, true);
+                foreach (MenuTree tree in subTrees)
+                {
+                    bool tmpflag = isShowAllAndSelectOwner;
+                    if (!isShowAllAndSelectOwner && tree.IsHidden)
+                        continue;
+
+                    //创建存有必要信息的TReeNode
+                    TreeNode newNode = newTreeNode(tree, AppVirtualPath, chechBox, isAddUrl, false);
+                    if (isShowAllAndSelectOwner)
+                    {
+                        newNode.Checked = true;
+                    }
+                    node.ChildNodes.Add(newNode);
+                    f(node, tree.MenuId);
+                }
+                return true;
+            };
+           
+            foreach (MenuTree tree in trees)
+            {
+                bool tmpflag = isShowAllAndSelectOwner;
+                if (!isShowAllAndSelectOwner && tree.IsHidden)
+                    continue;
+                //创建存有必要信息的TReeNode
+                TreeNode node = newTreeNode(tree, AppVirtualPath, chechBox, isAddUrl, false);
+                if (isShowAllAndSelectOwner )
+                {
+                    node.Checked = true;
+                }
+                treeview.Nodes.Add(node);
+                f(node, tree.MenuId);
+            }
+        }
+      
+        public static void GetUserMenuTree(ref TreeView treeview, string appVirtualPath,
+            Webpages_VUser vuser, int rootID, bool chechBox, bool isAddUrl,
             bool isShowAllAndSelectOwner)
         {
             if (treeview == null)
                 return;
-            MenuTree[] trees = GetOneFloorByRootCode(RootID);
+            if (vuser == null)
+            {
+                GetPublicMenuTree(ref treeview, appVirtualPath, rootID, chechBox, isAddUrl, isShowAllAndSelectOwner);
+                return;
+            }
+            MenuTree[] trees = GetOneFloorByRootID(rootID);
             using (var db = new WebPagesContext())
             {
-                Webpages_VUser vuser = db.Webpages_VUsers.FirstOrDefault(o=>o.VUserId == vuserId);
-                if (vuser == null)
-                    return;
-
                 if (trees != null && trees.Length > 0)
                 {
                     treeview.Target = _Target;
@@ -143,7 +175,7 @@ namespace HTBox.Web.Models
                                 continue;
 
                             //创建存有必要信息的TReeNode
-                            TreeNode node = newTreeNode(tree, AppVirtualPath, ChechBox, isAddUrl, false);
+                            TreeNode node = newTreeNode(tree, appVirtualPath, chechBox, isAddUrl, false);
 
                             if (isShowAllAndSelectOwner)
                             {
@@ -155,8 +187,8 @@ namespace HTBox.Web.Models
                             bool IsThisNodeContainShisUser = true;//管理员拥有所有 
                             AddChildrenToNode(node, null,
                                 tree.MenuId,
-                                AppVirtualPath,
-                                ref IsThisNodeContainShisUser, ChechBox, isAddUrl,
+                                appVirtualPath,
+                                ref IsThisNodeContainShisUser, chechBox, isAddUrl,
                                 //isShowAllAndSelectOwner && !node.Checked);
                                   isShowAllAndSelectOwner, node.Checked);
                         }
@@ -166,11 +198,11 @@ namespace HTBox.Web.Models
 
 
                         bool IsThisNodeContainShisUser = false;
-                        int[] parentRls = GetThisNodeAllViewRoles(RootID);
+                        int[] parentRls = GetThisNodeAllViewRoles(rootID);
                         if (parentRls != null && parentRls.Length > 0)
                         {//判断父节点是否包含
 
-                            if (CheckThoseVuserContainThisGroup(parentRls, vuserId))
+                            if (CheckThoseVuserContainThisGroup(parentRls, vuser))
                             {
                                 IsThisNodeContainShisUser = true;
                             }
@@ -187,14 +219,14 @@ namespace HTBox.Web.Models
                             //此节点的角色列表中是不是包含此用户或者角色的标志
                             if (!tmpflag && Roles != null && Roles.Length > 0)
                             {
-                                if (CheckThoseVuserContainThisGroup(Roles, vuserId))
+                                if (CheckThoseVuserContainThisGroup(Roles, vuser))
                                 {
                                     tmpflag = true;
                                 }
 
                             }
                             //创建存有必要信息的TReeNode
-                            TreeNode node = newTreeNode(tree, AppVirtualPath, ChechBox, isAddUrl, false);
+                            TreeNode node = newTreeNode(tree, appVirtualPath, chechBox, isAddUrl, false);
 
                             if (isShowAllAndSelectOwner && tmpflag)
                             {
@@ -203,10 +235,10 @@ namespace HTBox.Web.Models
                             }
 
                             treeview.Nodes.Add(node);
-                            AddChildrenToNode(node, vuserId,
+                            AddChildrenToNode(node, vuser.VUserId,
                                 tree.MenuId,
-                                AppVirtualPath,
-                                ref tmpflag, ChechBox, isAddUrl,
+                                appVirtualPath,
+                                ref tmpflag, chechBox, isAddUrl,
                                 //isShowAllAndSelectOwner && !node.Checked);
                                   isShowAllAndSelectOwner, node.Checked);
 
@@ -264,7 +296,7 @@ namespace HTBox.Web.Models
         {
             if (parentnode == null)
                 throw new ArgumentNullException("parentnode");
-            MenuTree[] trees = GetOneFloorByRootCode(RootID);
+            MenuTree[] trees = GetOneFloorByRootID(RootID);
             bool tmpflag = IsThisNodeContainShisUser;
             bool ReturnFlag = IsThisNodeContainShisUser;
             if (trees != null && trees.Length > 0)
@@ -405,13 +437,15 @@ namespace HTBox.Web.Models
         }
         public static bool CheckThoseVuserContainThisGroup(int[] vuserIds, int vuserId)
         {
+            return CheckThoseVuserContainThisGroup(vuserIds, Webpages_VUser.Find(vuserId));
+        }
+        public static bool CheckThoseVuserContainThisGroup(int[] vuserIds, Webpages_VUser vuser)
+        {
             if (vuserIds == null || vuserIds.Length == 0)
                 return false;
             using (var db = new WebPagesContext())
             {
-                Webpages_VUser vuser = db.Webpages_VUsers.FirstOrDefault(o=>o.VUserId == vuserId);
-                if (vuser == null)
-                    return false;
+                
                 if (vuser.Type == (int)VUserType.Group)
                 {
                     foreach (int vuserid in vuserIds)
@@ -543,7 +577,7 @@ namespace HTBox.Web.Models
         public static Dictionary<int, int[]> GetChildrenNodeRoles(int menuid)
         {
             Dictionary<int, int[]> hstbl = new Dictionary<int, int[]>();
-            MenuTree[] trees = MenuTreeCtrl.GetOneFloorByRootCode(menuid);
+            MenuTree[] trees = MenuTreeCtrl.GetOneFloorByRootID(menuid);
             if (trees != null && trees.Length > 0)
             {
                 foreach (MenuTree tree in trees)
@@ -564,7 +598,7 @@ namespace HTBox.Web.Models
         /// <param name="menuid">节点ID</param>
         private static void AddChildrenToTbl(ref Dictionary<int, int[]> hstbl, int menuid)
         {
-            MenuTree[] trees = MenuTreeCtrl.GetOneFloorByRootCode(menuid);
+            MenuTree[] trees = MenuTreeCtrl.GetOneFloorByRootID(menuid);
             if (trees != null && trees.Length > 0)
             {
                 foreach (MenuTree tree in trees)
@@ -605,33 +639,31 @@ namespace HTBox.Web.Models
             return rtn;
         }
 
-        /// <summary>
-        /// 判断在以RootID为根的功能树下有没有属于用户(角色)GroupCode的节点
-        /// </summary>
-        /// <param name="RootID">menuid</param>
-        /// <param name="GroupCode">VuserId</param>
-        /// <returns></returns>
-        public static bool IsUserHaveNodeInThisFuntion(int RootID, int vuserId)
+        public static bool IsUserHaveNodeInThisFuntion(int RootID, int userid)
+        {
+            return IsUserHaveNodeInThisFuntion(RootID, Webpages_VUser.CreateOrGetByUserId(userid));
+        }
+        public static bool IsUserHaveNodeInThisFuntion(int RootID, Webpages_VUser vuser)
         {
 
             int[] ThisNodeGroupCodes = GetThisNodeAllViewRoles(RootID);
-            
-            if (CheckThoseVuserContainThisGroup(ThisNodeGroupCodes, vuserId))
+
+            if (CheckThoseVuserContainThisGroup(ThisNodeGroupCodes, vuser))
                 return true;
 
 
-            MenuTree[] trees = GetOneFloorByRootCode(RootID);
+            MenuTree[] trees = GetOneFloorByRootID(RootID);
             if (trees != null && trees.Length > 0)
             {
                 foreach (MenuTree tree in trees)
                 {
                     int[] Roles = GetThisNodeVuserIdList(tree.MenuId);
-                    if (CheckThoseVuserContainThisGroup(Roles, vuserId))
+                    if (CheckThoseVuserContainThisGroup(Roles, vuser))
                         return true;
 
                     //不能不管真假就return！！！假的时候还要判断其他的兄弟节点呢！
                     if (IsUserHaveNodeInThisFuntion(tree.MenuId,
-                        vuserId))
+                        vuser))
                         return true;
                 }
             }
@@ -666,7 +698,7 @@ namespace HTBox.Web.Models
         {
             List<int> inIdlist = new List<int>();//包含能浏览的节点ID
             TreeView tree = new TreeView();
-            GetUserMenuTree(ref tree, null, Webpages_VUser.CreateOrGetByUserId(userId).VUserId, 
+            GetUserMenuTree(ref tree, null, Webpages_VUser.CreateOrGetByUserId(userId), 
                 MenuTreeCtrl.TreeRootID, false, false, false);
             AddTreeToList(tree.Nodes, inIdlist);
             return inIdlist;
@@ -697,7 +729,7 @@ namespace HTBox.Web.Models
             }
             string[] TopTreeAry = SysManageTopTreeCode.Split(',');
 
-            MenuTree[] trees = MenuTreeCtrl.GetOneFloorByRootCode(MenuTreeCtrl.TreeRootID);
+            MenuTree[] trees = MenuTreeCtrl.GetOneFloorByRootID(MenuTreeCtrl.TreeRootID);
             if (trees != null && trees.Length > 0)
             {
                 foreach (MenuTree tree in trees)
@@ -722,7 +754,7 @@ namespace HTBox.Web.Models
         }
         private static void AddUserCannotViewPages(ref  List<string> list, int rootID)
         {
-            MenuTree[] trees = MenuTreeCtrl.GetOneFloorByRootCode(rootID);
+            MenuTree[] trees = MenuTreeCtrl.GetOneFloorByRootID(rootID);
             if (trees != null && trees.Length > 0)
             {
                 foreach (MenuTree tree in trees)
@@ -743,7 +775,7 @@ namespace HTBox.Web.Models
             string PageUrl = GetThisNodePageUrl(rootID);
             PageUrl = StringAnalyse.GetPagePurename(PageUrl);
             list.Remove(PageUrl);
-            MenuTree[] trees = MenuTreeCtrl.GetOneFloorByRootCode(rootID);
+            MenuTree[] trees = MenuTreeCtrl.GetOneFloorByRootID(rootID);
             if (trees != null && trees.Length > 0)
             {
                 foreach (MenuTree tree in trees)
@@ -760,7 +792,7 @@ namespace HTBox.Web.Models
         private static void AddUserCannotViewPages(ref List<string> list, ref List<int> inIdlist, int rootID,
         string userId)
         {
-            MenuTree[] nodes = MenuTreeCtrl.GetOneFloorByRootCode(rootID);
+            MenuTree[] nodes = MenuTreeCtrl.GetOneFloorByRootID(rootID);
             using (var db = new WebPagesContext())
             {
                 if (nodes != null)
@@ -822,67 +854,6 @@ namespace HTBox.Web.Models
                 }
             }
         }
-       
-        ///// <summary>
-        ///// 取得此节点的parent中包含vuserid的,最大的权限值
-        ///// </summary>
-        ///// <param name="nodeId"></param>
-        ///// <param name="vuserId"></param>
-        ///// <returns></returns>
-        //public static int GetNodeMaxRight(int curNodeId, int vuserId)
-        //{
-        //    MenuTree menu = MenuTree.GetInstanceBy(curNodeId);
-
-        //    int maxVal = 0;
-        //    Webpages_VUser curVuser = new Webpages_VUser(vuserId);
-        //    curVuser.ReadData();
-        //    MenuTreeRight.TblQuery query = new MenuTreeRight.TblQuery(ConfigInfo.DefaultDbName);
-        //    while (menu != null)//检查此节点是否有包含vuserid的vuser
-        //    {
-               
-        //        query.Clear();
-        //        query.MENUID = menu.MenuId;
-
-        //        MenuTreeRight[] list = query.ControlHelper.GetArrayListBy(ConfigInfo.ConnectionString) as MenuTreeRight[];
-        //        if (list != null)
-        //        {
-        //            foreach (MenuTreeRight r in list)
-        //            {
-        //                Webpages_VUser tmpv = new Webpages_VUser(r.VUSERID.Value);
-        //                tmpv.ReadData();
-        //                if (tmpv.Type == VUserType.Group && curVuser.Type == VUserType.Group)
-        //                {
-        //                    if (ADGroup.IsGroupInGroup(curVuser.GroupId, tmpv.GroupId) && r.RIGHTTYPE > maxVal)
-        //                    {
-        //                        maxVal = r.RIGHTTYPE.Value;
-        //                    }
-        //                }
-        //                else if (tmpv.Type == VUserType.Group && curVuser.Type == VUserType.User)
-        //                {
-        //                    ADUser user = new ADUser(curVuser.UserId);
-        //                    if (user.IsUserInGroup(new ADGroup(tmpv.GroupId)) && r.RIGHTTYPE > maxVal)
-        //                    {
-        //                        maxVal = r.RIGHTTYPE.Value;
-        //                    }
-        //                }
-        //                else if (tmpv.Type == VUserType.User && curVuser.Type == VUserType.User)
-        //                {
-        //                    if (tmpv.VUserId == curVuser.VUserId && r.RIGHTTYPE > maxVal)
-        //                    {
-        //                        maxVal = r.RIGHTTYPE.Value;
-        //                    }
-        //                }
-        //            }
-        //        }
-        //        if (!menu.PARENTID.HasValue)
-        //            break;
-        //        menu = MenuTree.GetInstanceBy(menu.PARENTID.Value);
-
-        //    }
-        //    return maxVal ;
-        //}
-
-       
-
+     
     }
 }

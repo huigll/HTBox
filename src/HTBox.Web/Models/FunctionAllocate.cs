@@ -158,7 +158,7 @@ namespace HTBox.Web.Models
             if (parentNodeID != ExceptNodeID)//如果到了ExceptNodeID节点，就返回
             {
                 bool IsOver = false;//本层节点中是否有ExceptNodeID节点的标志
-                MenuTree[] trees = MenuTreeCtrl.GetOneFloorByRootCode(parentNodeID);
+                MenuTree[] trees = MenuTreeCtrl.GetOneFloorByRootID(parentNodeID);
                 if (trees == null)
                     return;
                 //查找本层中是否有ExceptNodeID节点

@@ -12,9 +12,10 @@ namespace HTBox.Web.Controllers
         private WebPagesContext db = new WebPagesContext();
         //
         // GET: /Menu/
-        public ActionResult Index(int p = 1,int? parentID=null, int pageSize = 10, string orderby = "MenuId", bool desc = false)
+        public ActionResult Index(int p = 1,int? parentID=null, int pageSize = 10,
+            string orderby = "MenuId", bool desc = false)
         {
-            Menu m = new Menu();
+            WebMenu m = new WebMenu();
             m.ParentId = parentID;
             m.CurrentPageNo = p;
             m.StartPageNo = 1;
@@ -80,7 +81,7 @@ namespace HTBox.Web.Controllers
         public ActionResult Search(string name="",int?parentID=null, int p = 1, int pageSize = 10,string orderby="MenuId",bool desc=false)
         {
 
-            Menu m = new Menu();
+            WebMenu m = new WebMenu();
             m.ParentId = parentID;
             m.CurrentPageNo = p;
             m.StartPageNo = 1;

@@ -1,4 +1,4 @@
-﻿@model HTBox.Web.Models.Menu
+﻿@model HTBox.Web.Models.WebMenu
  
 
 <div class="form">
@@ -39,7 +39,7 @@
                                     <input type="submit" value="Search" />
                                 </td>
                                 <td>
-                                    <input type="button" onclick="window.location.href='@Url.Action("Create", "Menu")'; return false;" value="Create"/>
+                                    <input type="button" onclick="window.location.href='@Url.Action("Create", "Menu", new { parentId = Model.ParentId })'; return false;" value="Create"/>
                                     
                                         @Html.GetParentNavigation(Model)
                                     

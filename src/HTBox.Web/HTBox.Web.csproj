@@ -214,6 +214,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>WebResource.resx</DependentUpon>
     </Compile>
+    <Compile Include="Lan\WebResource.zh.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WebResource.zh.resx</DependentUpon>
+    </Compile>
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\DataTables.cs" />
     <Compile Include="Models\FunctionAllocate.cs" />
@@ -221,7 +226,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\WebPagesContext.cs" />
-    <Compile Include="Models\Menu.cs" />
+    <Compile Include="Models\WebMenu.cs" />
     <Compile Include="Models\MySqlSimpleMembershipProvider.cs" />
     <Compile Include="Models\MySqlSimpleRoleProvider.cs" />
     <Compile Include="App_Start\SiteSetting.cs" />
@@ -435,6 +440,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Lan\WebResource.zh.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WebResource.zh.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Lan\WebResource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>WebResource.Designer.cs</LastGenOutput>

@@ -207,6 +207,7 @@ namespace HTBox.Web.Models
         public string PageUrl { get; set; }
         public bool IsHidden { get; set; }
         public int OrderIndex { get; set; }
+        public bool IsPublic { get; set; }
         [MaxLength(50)]
         public string OpenTarget { get; set; }
 
@@ -253,6 +254,15 @@ namespace HTBox.Web.Models
         [Required]
         public int Type { get; set; }
 
+
+
+        public static Webpages_VUser Find(int vuserid)
+        {
+            using (var db = new WebPagesContext())
+            {
+                return db.Webpages_VUsers.FirstOrDefault(o => o.VUserId == vuserid);
+            }
+        }
 
         public static Webpages_VUser CreateOrGetByUserId(int userid)
         {

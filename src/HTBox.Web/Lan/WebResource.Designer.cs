@@ -68,5 +68,32 @@ namespace HTBox.Web.Lan {
                 return ResourceManager.GetString("ConfigElementNotFind", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Page {0} Of {1}.
+        /// </summary>
+        internal static string CurrentPageTotalPage {
+            get {
+                return ResourceManager.GetString("CurrentPageTotalPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to FirstPage.
+        /// </summary>
+        internal static string FirstPage {
+            get {
+                return ResourceManager.GetString("FirstPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to LastPage.
+        /// </summary>
+        internal static string LastPage {
+            get {
+                return ResourceManager.GetString("LastPage", resourceCulture);
+            }
+        }
     }
 }
