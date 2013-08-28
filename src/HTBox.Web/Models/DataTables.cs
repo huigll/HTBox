@@ -198,6 +198,7 @@ namespace HTBox.Web.Models
     [Table("webpages_MenuTree")]
     public class MenuTree
     {
+
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int MenuId { get; set; }
@@ -206,6 +207,7 @@ namespace HTBox.Web.Models
         public int? ParentId { get; set; }
         public string PageUrl { get; set; }
         public bool IsHidden { get; set; }
+        
         public int OrderIndex { get; set; }
         public bool IsPublic { get; set; }
         [MaxLength(50)]
@@ -271,6 +273,8 @@ namespace HTBox.Web.Models
                 var vuser = db.Webpages_VUsers.FirstOrDefault(o => o.UserID == userid);
                 if (vuser != null)
                     return vuser;
+                if (db.UserProfiles.Find(userid) == null)
+                    return null;
                 vuser = new Webpages_VUser();
                 vuser.UserID = userid;
                 vuser.Type = (int)VUserType.User;

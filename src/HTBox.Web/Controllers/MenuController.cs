@@ -47,7 +47,11 @@ namespace HTBox.Web.Controllers
         }
         public ActionResult Create()
         {
-            return View();
+            MenuTree tree = new MenuTree()
+            {
+                OrderIndex = 1
+            };
+            return View(tree);
         }
         [HttpPost]
         public ActionResult Create(MenuTree menu)
@@ -55,6 +59,7 @@ namespace HTBox.Web.Controllers
 
             db.MenuTrees.Add(menu);
             db.SaveChanges();
+            MenuNavigation.ClearMenuTreeCache();
             string parentid = Request.QueryString["parentid"];
             if (!string.IsNullOrEmpty(parentid))
                 return RedirectToAction("index", new {@parentId=parentid });
@@ -95,7 +100,7 @@ namespace HTBox.Web.Controllers
             var menu = db.MenuTrees.Find(id);
             db.Entry(menu).State = System.Data.EntityState.Deleted;
             db.SaveChanges();
-
+            MenuNavigation.ClearMenuTreeCache();
             return Content(Boolean.TrueString);
         }
 

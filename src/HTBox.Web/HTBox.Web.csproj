@@ -74,18 +74,6 @@
     <Reference Include="Microsoft.Web.WebPages.OAuth, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.OAuth.2.0.30506.0\lib\net40\Microsoft.Web.WebPages.OAuth.dll</HintPath>
     </Reference>
-    <Reference Include="MySql.Data, Version=6.7.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MySql.Data.6.7.4\lib\net40\MySql.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="MySql.Data.Entity, Version=6.7.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MySQL.Data.Entities.6.7.4.1\lib\net40\MySql.Data.Entity.dll</HintPath>
-    </Reference>
-    <Reference Include="MySql.Web, Version=6.7.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MySql.Web.6.7.4\lib\net40\MySql.Web.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -437,6 +425,14 @@
     <Content Include="Views\UserRole\DeleteRole.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\mysql-connector-net-6.7.4-src\Source\MySql.Data.Entity\MySql.Data.Entity.csproj">
+      <Project>{EDED3135-95D2-4BCE-A810-F3F2AD7935B7}</Project>
+      <Name>MySql.Data.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\mysql-connector-net-6.7.4-src\Source\MySql.Data\MySql.Data.csproj">
+      <Project>{E9DF5ED1-4CBD-4226-B931-9A51610AC14D}</Project>
+      <Name>MySql.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\QQAuthentication\QQAuthentication.csproj">
       <Project>{12A761D4-F251-4CFD-AD86-C8F28E76F666}</Project>
       <Name>QQAuthentication</Name>

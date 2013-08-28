@@ -52,8 +52,10 @@ namespace HTBox.Web.Models
             {
                 if (RootID != TreeRootID)
                     return db.MenuTrees.Where(o => o.ParentId == RootID && o.IsPublic == isPublic).OrderBy(o => o.OrderIndex).ToArray();
-                else
-                    return db.MenuTrees.Where(o => o.ParentId == null && o.IsPublic == isPublic).OrderBy(o => o.OrderIndex).ToArray();
+                
+                var query=db.MenuTrees.Where(o => o.ParentId == null && o.IsPublic == isPublic).OrderBy(o => o.OrderIndex);
+                var sql = query.ToString();
+                return query.ToArray();
             }
         }
         /// <summary>
@@ -372,13 +374,9 @@ namespace HTBox.Web.Models
             node.Expanded = Expand;
             node.Target = _Target;
             
-#if MYDEBUG 
-			
-			node.Text = row["NodeName"].ToString() + "{" 
-				+ row["OWNERGROUPCODE"].ToString() + "}";
-#else
+
             node.Text = tree.MenuName;
-#endif
+
             node.Value = tree.MenuId.ToString();
             if (isAddUrl)
             {
@@ -399,35 +397,7 @@ namespace HTBox.Web.Models
                 node.Target = tree.OpenTarget;
             return node;
         }
-        ///// <summary>
-        ///// 检查角色列表Roles中是不是包含用户GroupCode
-        ///// </summary>
-        ///// <param name="Roles"></param>
-        ///// <param name="GroupCode"></param>
-        ///// <returns></returns>
-        //public static bool CheckThisNodeContainShisUser(string Roles, string GroupCode)
-        //{
-        //    if (Roles == null || Roles.Length == 0)
-        //        return false;
-        //    ADUser user = new ADUser(GroupCode);
-        //    ADGroup[] groups = user.GetDirectlyAboveGroup();
-        //    foreach (ADGroup sg  in groups)
-        //    {
-        //        string gCode = sg.GroupCode;
-        //        foreach (string role in Roles.Split(';'))
-        //        {
-        //            if (role.Length > 0)
-        //            {
-
-        //                if (ADGroup.IsGroupInGroup(gCode, role))
-        //                {
-        //                    return true;
-        //                }
-        //            }
-        //        }
-        //    }
-        //    return false;
-        //}
+      
         public static bool IsGroupInGroup(string groupCodeX, string groupCodeY)
         {
             if (groupCodeX == groupCodeY)

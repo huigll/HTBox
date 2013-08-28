@@ -7,7 +7,7 @@
 @Scripts.Render("~/bundles/jqueryval")
 @Scripts.Render("~/bundles/menu")
 <h2>
-    index</h2>
+    User And Role</h2>
 <script type="text/javascript">
 		<!--
     var setting = {
@@ -32,10 +32,7 @@
                 enable: true
             }
         },
-        //        check: {
-        //            enable: true,
-        //            chkDisabledInherit: true
-        //        },
+     
         callback: {
             beforeDrag: beforeDrag,
             beforeEditName: beforeEditName,
@@ -62,7 +59,7 @@
 
         var zTree = $.fn.zTree.getZTreeObj("treeDemo");
         zTree.selectNode(treeNode);
-        return confirm("Confirm delete node '" + treeNode.name + "' it?");
+        return confirm("Confirm delete node '" + treeNode.name + "'?");
     }
     function onRemove(e, treeId, treeNode) {
         var url;
@@ -95,12 +92,7 @@
             // Unbind existing validation
             $form.unbind();
             $form.data("validator", null);
-            // Check document for changes
-            //$.validator.unobtrusive.parse(document);
-            // Re add validation with changes
-            //  $form.validate($form.data("unobtrusiveValidation").options);
-            //open dialog
-           // dialogDiv.dialog('open');
+         
         });
     }
 
@@ -109,60 +101,46 @@
     function addHoverDom(treeId, treeNode) {
         var sObj = $("#" + treeNode.tId + "_span");
         if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0) return;
-        var addRoleStr = "<span class='button add' id='addBtn_" + treeNode.tId
-				+ "' title='add Role' onfocus='this.blur();'></span>";
-        sObj.after(addRoleStr);
-        var addUserStr = "<span class='button addUser' id='addUserBtn_" + treeNode.tId
+
+        if (treeNode.nodeType != 'User') {
+            var addUserStr = "<span class='button addUser' id='addUserBtn_" + treeNode.tId
 				+ "' title='add User' onfocus='this.blur();'></span>";
-        sObj.after(addUserStr);
-
-        var btn = $("#addBtn_" + treeNode.tId);
-        if (btn) btn.bind("click", function () {
-            //var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-            //zTree.addNodes(treeNode, { id: (100 + newCount), pId: treeNode.id, name: "new node" + (newCount++) });
-
-            url = '@Url.Action("CreateRole", "UserRole")?parentNodeCode=' + treeNode.id;
-            var dialogDiv = $('#updateDialog');
-            $.get(url, function (data) {
-                dialogDiv.html(data);
-                //validation
-                var $form = $("#updateUserForm");
-                // Unbind existing validation
-                $form.unbind();
-                $form.data("validator", null);
-                // Check document for changes
-                //$.validator.unobtrusive.parse(document);
-                // Re add validation with changes
-                //  $form.validate($form.data("unobtrusiveValidation").options);
-                //open dialog
-                //dialogDiv.dialog('open');
+            sObj.after(addUserStr);
+            var userbtn = $("#addUserBtn_" + treeNode.tId);
+            if (userbtn) userbtn.bind("click", function () {
+                url = '@Url.Action("CreateUser", "UserRole")?code=' + treeNode.id;
+                var dialogDiv = $('#updateDialog');
+                $.get(url, function (data) {
+                    dialogDiv.html(data);
+                    //validation
+                    var $form = $("#updateUserForm");
+                    // Unbind existing validation
+                    $form.unbind();
+                    $form.data("validator", null);
+                });
+                return false;
             });
 
+            var addRoleStr = "<span class='button add' id='addBtn_" + treeNode.tId
+				+ "' title='add Role' onfocus='this.blur();'></span>";
+            sObj.after(addRoleStr);
+            var btn = $("#addBtn_" + treeNode.tId);
+            if (btn) btn.bind("click", function () {
 
-            return false;
-        });
+                url = '@Url.Action("CreateRole", "UserRole")?parentNodeCode=' + treeNode.id;
+                var dialogDiv = $('#updateDialog');
+                $.get(url, function (data) {
+                    dialogDiv.html(data);
+                    //validation
+                    var $form = $("#updateUserForm");
+                    // Unbind existing validation
+                    $form.unbind();
+                    $form.data("validator", null);
+                });
 
-        var userbtn = $("#addUserBtn_" + treeNode.tId);
-        if (userbtn) userbtn.bind("click", function () {
-            url = '@Url.Action("CreateUser", "UserRole")?code=' + treeNode.id;
-            var dialogDiv = $('#updateDialog');
-            $.get(url, function (data) {
-                dialogDiv.html(data);
-                //validation
-                var $form = $("#updateUserForm");
-                // Unbind existing validation
-                $form.unbind();
-                $form.data("validator", null);
-                // Check document for changes
-                //$.validator.unobtrusive.parse(document);
-                // Re add validation with changes
-                //  $form.validate($form.data("unobtrusiveValidation").options);
-                //open dialog
-                //dialogDiv.dialog('open');
+                return false;
             });
-            return false;
-        });
-
+        }
     };
     function removeHoverDom(treeId, treeNode) {
         $("#addBtn_" + treeNode.tId).unbind().remove();
@@ -214,25 +192,6 @@
         }
     }
 
-
-//    $(function () {
-//        $('#updateDialog').dialog({
-//            autoOpen: false,
-//            width: 400,
-//            resizable: false,
-//            modal: true,
-//            buttons: {
-//                "Update": function () {
-//                    $("#update-message").html(''); //make sure there is nothing on the message before we continue                         
-//                    $("#updateUserForm").submit();
-//                },
-//                "Cancel": function () {
-//                    $(this).dialog("close");
-//                }
-//            }
-//        });
-//    });
-		//-->
 </script>
 <div style="display: inline;">
     <div style="display: inline-block; width: 300px; vertical-align: top;">

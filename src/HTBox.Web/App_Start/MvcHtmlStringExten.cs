@@ -12,6 +12,7 @@ using HTBox.Web.Lan;
 
 using System.Web.Caching;
 using System.Collections;
+using WebMatrix.WebData;
 namespace System.Web.Mvc
 {
     public static class MvcHtmlStringExten
@@ -229,12 +230,8 @@ namespace System.Web.Mvc
                 Webpages_VUser vuser = null;
                 if (!string.IsNullOrEmpty(userName))
                 {
-                    using (var db = new WebPagesContext())
-                    {
-                        
-                        int userid = db.UserProfiles.Where(o => o.UserName == userName).First().UserId;
-                        vuser = Webpages_VUser.CreateOrGetByUserId(userid);
-                    }
+                    int userid = WebSecurity.GetUserId(userName);
+                    vuser = Webpages_VUser.CreateOrGetByUserId(userid);
                 }
                 MenuTreeCtrl.GetUserMenuTree(ref menuTree, AppVirtualPath, vuser,
                     MenuTreeCtrl.TreeRootID, false, true, false);

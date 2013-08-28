@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HTBox.Web.Tests", "HTBox.We
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QQAuthentication", "QQAuthentication\QQAuthentication.csproj", "{12A761D4-F251-4CFD-AD86-C8F28E76F666}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySql.Data", "..\..\mysql-connector-net-6.7.4-src\Source\MySql.Data\MySql.Data.csproj", "{E9DF5ED1-4CBD-4226-B931-9A51610AC14D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySql.Data.Entity", "..\..\mysql-connector-net-6.7.4-src\Source\MySql.Data.Entity\MySql.Data.Entity.csproj", "{EDED3135-95D2-4BCE-A810-F3F2AD7935B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +29,14 @@ Global
 		{12A761D4-F251-4CFD-AD86-C8F28E76F666}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12A761D4-F251-4CFD-AD86-C8F28E76F666}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12A761D4-F251-4CFD-AD86-C8F28E76F666}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9DF5ED1-4CBD-4226-B931-9A51610AC14D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9DF5ED1-4CBD-4226-B931-9A51610AC14D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9DF5ED1-4CBD-4226-B931-9A51610AC14D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9DF5ED1-4CBD-4226-B931-9A51610AC14D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDED3135-95D2-4BCE-A810-F3F2AD7935B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDED3135-95D2-4BCE-A810-F3F2AD7935B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDED3135-95D2-4BCE-A810-F3F2AD7935B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDED3135-95D2-4BCE-A810-F3F2AD7935B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

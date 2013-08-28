@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Web.Mvc;
 using System.Web.Security;
 using Newtonsoft.Json;
+using System.Net.Http;
 
 namespace HTBox.Web.Models
 {
@@ -35,6 +36,7 @@ namespace HTBox.Web.Models
             ID = role.Code;
             Name = role.RoleName;
             NodeType = "Role";
+            ICON = "Content/zTreeStyle/img/role.gif";
         }
 
         public ZTree(Webpages_UserProfile user)
@@ -42,6 +44,7 @@ namespace HTBox.Web.Models
             ID = user.UserId.ToString();
             Name = user.UserName;
             NodeType = "User";
+            ICON = "Content/zTreeStyle/img/user.gif";
         }
     }
 

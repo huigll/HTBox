@@ -71,13 +71,21 @@ namespace HTBox.Web.Controllers
         public ActionResult CreateUser(string code)
         {
             ViewBag.RoleCode = code;
-            return View();
+            Webpages_UserProfile user=new Webpages_UserProfile()
+            {
+                IndexOrder = 1
+            };
+            return View(user);
         }
         [HttpPost]
         public ActionResult CreateUser(Webpages_UserProfile user, string roleCode)
         {
             using (TransactionScope ts = new TransactionScope())
             {
+                if (db.UserProfiles.Where(o => o.UserName == user.UserName).Any())
+                {
+                    return Content("User Exist");
+                }
                 db.UserProfiles.Add(user);
                 db.SaveChanges();
                 Webpages_UsersInRoles userRole = new Webpages_UsersInRoles()
@@ -96,7 +104,10 @@ namespace HTBox.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-
+                if (db.UserProfiles.Where(o => o.UserName == user.UserName && o.UserId != user.UserId).Any())
+                {
+                    return Content("User Exist");
+                }
                 db.Entry(user).State = System.Data.EntityState.Modified;
                 db.SaveChanges();
             }
@@ -112,7 +123,11 @@ namespace HTBox.Web.Controllers
                 ViewBag.ParentCode = parent.Code;
                 ViewBag.ParentName = parent.RoleName;
             }
-            return View();
+            Webpages_Roles role = new Webpages_Roles()
+            {
+                IndexOrder = 1
+            };
+            return View(role);
         }
         [HttpPost]
         public ActionResult CreateRole(Webpages_Roles role, string parentNodeCode = null)
