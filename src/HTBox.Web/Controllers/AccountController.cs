@@ -10,6 +10,7 @@ using Microsoft.Web.WebPages.OAuth;
 using WebMatrix.WebData;
 using HTBox.Web.Filters;
 using HTBox.Web.Models;
+using System.Configuration;
 
 namespace HTBox.Web.Controllers
 {
@@ -279,12 +280,13 @@ namespace HTBox.Web.Controllers
                     if (user == null)
                     {
                         // Insert name into the profile table
-                        db.UserProfiles.Add(new Webpages_UserProfile { UserName = model.UserName });
+                        var newUser = new Webpages_UserProfile { UserName = model.UserName };
+                        db.UserProfiles.Add(newUser);
                         db.SaveChanges();
-
+                        
                         OAuthWebSecurity.CreateOrUpdateAccount(provider, providerUserId, model.UserName);
                         OAuthWebSecurity.Login(provider, providerUserId, createPersistentCookie: false);
-
+                        WebSecurity.CreateAccount(model.UserName, null);
                         return RedirectToLocal(returnUrl);
                     }
                     else
@@ -333,7 +335,8 @@ namespace HTBox.Web.Controllers
                 });
             }
 
-            ViewBag.ShowRemoveButton = externalLogins.Count > 1 || OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(User.Identity.Name));
+            ViewBag.ShowRemoveButton = externalLogins.Count > 1 ||
+                OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(User.Identity.Name));
             return PartialView("_RemoveExternalLoginsPartial", externalLogins);
         }
 

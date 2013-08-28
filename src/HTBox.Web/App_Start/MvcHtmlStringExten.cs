@@ -13,6 +13,7 @@ using HTBox.Web.Lan;
 using System.Web.Caching;
 using System.Collections;
 using WebMatrix.WebData;
+using Microsoft.Web.WebPages.OAuth;
 namespace System.Web.Mvc
 {
     public static class MvcHtmlStringExten
@@ -231,6 +232,7 @@ namespace System.Web.Mvc
                 if (!string.IsNullOrEmpty(userName))
                 {
                     int userid = WebSecurity.GetUserId(userName);
+                    
                     vuser = Webpages_VUser.CreateOrGetByUserId(userid);
                 }
                 MenuTreeCtrl.GetUserMenuTree(ref menuTree, AppVirtualPath, vuser,

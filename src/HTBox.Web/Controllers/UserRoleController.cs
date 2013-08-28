@@ -134,10 +134,15 @@ namespace HTBox.Web.Controllers
         {
             if (!string.IsNullOrEmpty(parentNodeCode))
             {
+                
                 var parent = db.WebPagesRoles.Find(parentNodeCode);
                 if (parent == null)
                 {
                     return HttpNotFound();
+                }
+                if (parent.GetSubRoleByName(role.RoleName, db) != null)
+                {
+                    return Content(role.RoleName + " Exist!");
                 }
                 //生成新的编码
                 string codeHead = parent.Code + "-";

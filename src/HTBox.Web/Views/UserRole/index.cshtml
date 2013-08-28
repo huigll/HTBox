@@ -108,6 +108,7 @@
             sObj.after(addUserStr);
             var userbtn = $("#addUserBtn_" + treeNode.tId);
             if (userbtn) userbtn.bind("click", function () {
+                clickedNode = treeNode;
                 url = '@Url.Action("CreateUser", "UserRole")?code=' + treeNode.id;
                 var dialogDiv = $('#updateDialog');
                 $.get(url, function (data) {
@@ -126,7 +127,7 @@
             sObj.after(addRoleStr);
             var btn = $("#addBtn_" + treeNode.tId);
             if (btn) btn.bind("click", function () {
-
+                clickedNode = treeNode;
                 url = '@Url.Action("CreateRole", "UserRole")?parentNodeCode=' + treeNode.id;
                 var dialogDiv = $('#updateDialog');
                 $.get(url, function (data) {

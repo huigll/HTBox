@@ -68,7 +68,29 @@ namespace HTBox.Web.Models
                     db.Dispose();
             }
         }
+        public Webpages_Roles GetSubRoleByName(string roleName, WebPagesContext db = null)
+        {
+            bool flag = db == null;
+            try
+            {
+                if (flag) db = new WebPagesContext();
+                string[] tmp = this.Code.Split('-');
+                int TreeDeep = tmp.Length;
+                int type = Convert.ToInt32(tmp[0]);
 
+                return (from m in db.WebPagesRoles
+                        where m.RoleName == roleName &&  m.Deep == TreeDeep &&
+                        m.Type == type &&
+                        m.Code.IndexOf(this.Code + "-") == 0
+                        orderby m.IndexOrder
+                        select m).FirstOrDefault();
+            }
+            finally
+            {
+                if (flag)
+                    db.Dispose();
+            }
+        }
         public static Webpages_Roles GetOrCreateRoot(int type=1,string rootName="Root",WebPagesContext db=null)
         {
             bool flag = db == null;

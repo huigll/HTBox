@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Helpers;
 using System.Web.Security;
 using WebMatrix.WebData;
+using System.Configuration;
 
 namespace HTBox.Web.Models
 {
@@ -83,9 +84,11 @@ namespace HTBox.Web.Models
 
         public override string CreateAccount(string userName, string password, bool requireConfirmationToken)
         {
-            if (String.IsNullOrEmpty(password))
-                throw new MembershipCreateUserException(MembershipCreateStatus.InvalidPassword);
-            string passwordHash = Crypto.HashPassword(password);
+            //if (String.IsNullOrEmpty(password))
+            //    throw new MembershipCreateUserException(MembershipCreateStatus.InvalidPassword);
+            string passwordHash = "";
+            if(!string.IsNullOrEmpty(password))
+                passwordHash  = Crypto.HashPassword(password);
             if (passwordHash.Length > 128)
                 throw new MembershipCreateUserException(MembershipCreateStatus.InvalidPassword);
 
@@ -111,7 +114,17 @@ namespace HTBox.Web.Models
                 ConfirmationToken = token,
                 PasswordChangedDate = DateTime.UtcNow
             });
-            
+            var root = Webpages_Roles.GetOrCreateRoot(db: dbContext);
+            var role = root.GetSubRoleByName(ConfigurationManager.AppSettings["SelfRegisterUserRole"], dbContext);
+            if (role != null)
+            {
+                Webpages_UsersInRoles ur = new Webpages_UsersInRoles()
+                {
+                    UserId = user.UserId,
+                    RoleCode = role.Code
+                };
+                dbContext.WebPagesUsersInRoles.Add(ur);
+            }
             try
             {
                 
@@ -134,7 +147,7 @@ namespace HTBox.Web.Models
                 return HttpServerUtility.UrlTokenEncode(bytes);
             }
         }
-
+        
         public override string CreateUserAndAccount(string userName, string password, bool requireConfirmation, IDictionary<string, object> values)
         {
             using (TransactionScope ts = new TransactionScope())
@@ -146,10 +159,6 @@ namespace HTBox.Web.Models
                 userProfiles.Add(user);
                 dbContext.SaveChanges();
                 
-
-
-
-
                 var rsl = CreateAccount(userName, password, requireConfirmation);
                 ts.Complete();
                 return rsl;
@@ -576,7 +585,7 @@ namespace HTBox.Web.Models
             var user = (from u in userProfiles where u.UserId == userId select u).FirstOrDefault();
             return user == null ? null : user.UserName;
         }
-
+        
         public override int GetUserIdFromOAuth(string provider, string providerUserId)
         {
             provider = provider.ToUpperInvariant();

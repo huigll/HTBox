@@ -40,7 +40,7 @@ namespace HTBox.Web.Models
 
             this.dbContext = new WebPagesContext();
         }
-
+        
         public override void AddUsersToRoles(string[] usernames, string[] roleNames)
         {
             if (preProvider != null)
