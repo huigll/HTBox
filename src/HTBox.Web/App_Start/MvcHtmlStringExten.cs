@@ -88,8 +88,9 @@ namespace System.Web.Mvc
             Enumerable.Range(startPage, totalPages)
             .Where(i => left <= i && i <= right)
             .Aggregate(new StringBuilder(string.Format(@"<div class=""pager-bar""><span>{0}</span>",
-                string.Format(WebResource.CurrentPageTotalPage,currentPage,totalPages)))
-            .Append(currentPage == startPage ? "<span class=\"pagerPage currentPage pagerPrefix\"> "+WebResource.FirstPage+" </span>" :
+               HttpUtility.HtmlEncode( string.Format(WebResource.CurrentPageTotalPage,currentPage,totalPages))))
+            .Append(currentPage == startPage ? "<span class=\"pagerPage currentPage pagerPrefix\"> " +
+            HttpUtility.HtmlEncode(WebResource.FirstPage) + " </span>" :
             helper.ActionLink(WebResource.FirstPage, actionName, controller, values, new Dictionary<string, object> 
             { { "class", "pagerPage firstPage pagerPrefix" } }).ToHtmlString()),
             (seed, page) =>
@@ -104,13 +105,14 @@ namespace System.Web.Mvc
                 htmlDic.Add("class", style);
 
                 if (page == currentPage)
-                    seed.AppendFormat("<span class=\"pagerPage currentPage\">{0}</span>", page);
+                    seed.AppendFormat("<span class=\"pagerPage currentPage\">{0}</span>", HttpUtility.HtmlEncode(page));
                 else
                     seed.Append(helper.ActionLink(page.ToString(), actionName, controller, values, htmlDic).ToHtmlString());
                 return seed;
             });
             values[currentPageUrlParameter] = totalPages;
-            html.Append(currentPage == totalPages ? "<span class=\"pagerPage currentPage pagerSubfix\"> "+WebResource.LastPage+" </span>" :
+            html.Append(currentPage == totalPages ? "<span class=\"pagerPage currentPage pagerSubfix\"> " + 
+                HttpUtility.HtmlEncode(WebResource.LastPage) + " </span>" :
                 helper.ActionLink(WebResource.LastPage, actionName, controller, 
                 values, new Dictionary<string, object> { { "class", "pagerPage lastPage pagerSubfix" } }).ToHtmlString())
                 .Append(@"</div>");
@@ -251,14 +253,16 @@ namespace System.Web.Mvc
                     if (node.ChildNodes.Count > 0)
                     {
                         sbMenuHtml.AppendFormat(@"<a class='fg-button fg-button-icon-right ui-widget ui-state-default' id='menu{0}' href='{1}' target='{2}' menuName='{3}' ><span class='ui-icon ui-icon-triangle-1-s'></span>{3}</a>",
-                            i, string.IsNullOrEmpty(node.NavigateUrl) ? "#" : node.NavigateUrl,
-                            node.Target == MenuTreeCtrl.MainTarget ? "_self" : node.Target, node.Text);
+                            i,HttpUtility.HtmlAttributeEncode(string.IsNullOrEmpty(node.NavigateUrl) ? "#" : node.NavigateUrl),
+                            HttpUtility.HtmlAttributeEncode(node.Target == MenuTreeCtrl.MainTarget ? "_self" : node.Target),
+                            HttpUtility.HtmlAttributeEncode(node.Text));
                     }
                     else
                     {
                         sbMenuHtml.AppendFormat(@"<a class='fg-button fg-button-icon-right ui-widget ui-state-default' id='menu{0}' href='{1}' target='{2}' menuName='{3}' >{3}</a>",
-                            i, string.IsNullOrEmpty(node.NavigateUrl) ? "#" : node.NavigateUrl,
-                            node.Target == MenuTreeCtrl.MainTarget ? "_self" : node.Target, node.Text);
+                            i, HttpUtility.HtmlAttributeEncode(string.IsNullOrEmpty(node.NavigateUrl) ? "#" : node.NavigateUrl),
+                            HttpUtility.HtmlAttributeEncode(node.Target == MenuTreeCtrl.MainTarget ? "_self" : node.Target),
+                            HttpUtility.HtmlAttributeEncode(node.Text));
                     }
                     if (node.ChildNodes.Count > 0)
                     {
@@ -308,8 +312,9 @@ namespace System.Web.Mvc
             {
                 System.Web.UI.WebControls.TreeNode node = parentNode.ChildNodes[i];
                 menuBodyHtml.AppendFormat(@"<li><a   href='{0}'  target='{1}' menuName='{2}'>{2}</a>",
-                   string.IsNullOrEmpty(node.NavigateUrl) ? "#" : node.NavigateUrl,
-                   node.Target == MenuTreeCtrl.MainTarget ? "_self" : node.Target, node.Text);
+                   HttpUtility.HtmlAttributeEncode(string.IsNullOrEmpty(node.NavigateUrl) ? "#" : node.NavigateUrl),
+                   HttpUtility.HtmlAttributeEncode(node.Target == MenuTreeCtrl.MainTarget ? "_self" : node.Target),
+                   HttpUtility.HtmlAttributeEncode(node.Text));
 
                 BindSubMenu(node, menuBodyHtml);
                 menuBodyHtml.Append("</li>");

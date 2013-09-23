@@ -7,7 +7,7 @@
 @Scripts.Render("~/bundles/jqueryval")
 @Scripts.Render("~/bundles/menu")
 <h2>
-    User And Role</h2>
+    User And Role   </h2>
 <script type="text/javascript">
 		<!--
     var setting = {
@@ -67,7 +67,15 @@
             url = '@Url.Action("DeleteUser", "UserRole")?userid=' + treeNode.id;
         else
             url = '@Url.Action("DeleteRole", "UserRole")?roleCode=' + treeNode.id;
-        $.get(url);
+        $.get(url, function (data) {
+            if (data != "True") {
+                $("#update-message").html(data);
+            }
+        }).error(function (er) {
+            var dialogDiv = $('#updateDialog');
+            dialogDiv.html(er.responseText);
+       
+        });
     }
 
     function showRemoveBtn(treeId, treeNode) {
@@ -195,6 +203,7 @@
 
 </script>
 <div style="display: inline;">
+    <div>@Html.ActionLink("Reload","") </div>
     <div style="display: inline-block; width: 300px; vertical-align: top;">
         <ul id="treeDemo" class="ztree">
         </ul>

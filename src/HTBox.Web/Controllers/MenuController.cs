@@ -84,6 +84,7 @@ namespace HTBox.Web.Controllers
 
                 db.Entry(menu).State = System.Data.EntityState.Modified;
                 db.SaveChanges();
+                MenuNavigation.ClearMenuTreeCache();
                 string parentid = Request.QueryString["parentid"];
                 if(!string.IsNullOrEmpty(parentid))
                     return RedirectToAction("index", new { @parentId = parentid });

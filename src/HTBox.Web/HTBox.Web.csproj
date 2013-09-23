@@ -442,10 +442,12 @@
     <EmbeddedResource Include="Lan\WebResource.zh.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>WebResource.zh.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Lan\WebResource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>WebResource.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

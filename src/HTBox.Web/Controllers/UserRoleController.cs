@@ -18,7 +18,9 @@ namespace HTBox.Web.Controllers
 
         public ActionResult Index()
         {
+            
             return View();
+
         }
 
         public ActionResult GetData(string id = null)//此参数名需要与 tree setting 属性 相同
@@ -221,16 +223,16 @@ namespace HTBox.Web.Controllers
             {
                 var menu = db.UserProfiles.Find(userid);
                 db.Entry(menu).State = System.Data.EntityState.Deleted;
-                foreach (var vuser in db.Webpages_VUsers.Where(o => o.UserID == userid))
+                foreach (var vuser in db.Webpages_VUsers.Where(o => o.UserID == userid).ToList())
                 {
-                    foreach (var tree in db.MenuTreeRights.Where(o => o.VuserID == vuser.VUserId))
+                    foreach (var tree in db.MenuTreeRights.Where(o => o.VuserID == vuser.VUserId).ToList())
                     {
                         db.Entry(tree).State = System.Data.EntityState.Deleted;
                     }
                     db.Entry(vuser).State = System.Data.EntityState.Deleted;
 
                 }
-                foreach (var vuser in db.WebPagesUsersInRoles.Where(o => o.UserId == userid))
+                foreach (var vuser in db.WebPagesUsersInRoles.Where(o => o.UserId == userid).ToList())
                 {
                     db.Entry(vuser).State = System.Data.EntityState.Deleted;
                 }

@@ -156,6 +156,7 @@ namespace HTBox.Web.Models
                     throw new MembershipCreateUserException(MembershipCreateStatus.DuplicateUserName);
 
                 Webpages_UserProfile user = new Webpages_UserProfile() { UserName = userName };
+                user.Email = Convert.ToString(values["email"]);
                 userProfiles.Add(user);
                 dbContext.SaveChanges();
                 
